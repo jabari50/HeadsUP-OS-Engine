@@ -1,0 +1,7 @@
+fastapi==0.125.0
+uvicorn==0.46.0
+pydantic==1.10.21
+pandas==2.2.3
+numpy==1.26.4
+httpx==0.28.1
+python-multipart==0.0.20
