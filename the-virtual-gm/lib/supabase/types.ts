@@ -2660,6 +2660,54 @@ export type Database = {
         }
         Relationships: []
       }
+      public_athlete_cards: {
+        Row: {
+          confidence_band: string | null
+          full_name: string | null
+          graduation_year: number | null
+          location_city: string | null
+          location_state: string | null
+          market_position: string | null
+          neck_up_ner: number | null
+          neck_up_pro_score: number | null
+          ovr: number | null
+          position: string | null
+          profile_slug: string | null
+          school: string | null
+          secondary_tags: string[] | null
+        }
+        Insert: {
+          confidence_band?: string | null
+          full_name?: string | null
+          graduation_year?: number | null
+          location_city?: string | null
+          location_state?: string | null
+          market_position?: string | null
+          neck_up_ner?: number | null
+          neck_up_pro_score?: number | null
+          ovr?: number | null
+          position?: string | null
+          profile_slug?: string | null
+          school?: string | null
+          secondary_tags?: string[] | null
+        }
+        Update: {
+          confidence_band?: string | null
+          full_name?: string | null
+          graduation_year?: number | null
+          location_city?: string | null
+          location_state?: string | null
+          market_position?: string | null
+          neck_up_ner?: number | null
+          neck_up_pro_score?: number | null
+          ovr?: number | null
+          position?: string | null
+          profile_slug?: string | null
+          school?: string | null
+          secondary_tags?: string[] | null
+        }
+        Relationships: []
+      }
       scout_ledger: {
         Row: {
           audit_ready: boolean | null

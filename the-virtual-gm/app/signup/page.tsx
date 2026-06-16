@@ -46,7 +46,7 @@ export default function SignUpPage() {
           Build your front office
         </div>
         <p style={{ fontSize: 13, color: "var(--mid)", marginTop: 4 }}>
-          Free during the TABC pilot. No card required.
+          Free during the pilot. No card required.
         </p>
         <div
           style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 18 }}

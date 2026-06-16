@@ -75,7 +75,7 @@ export function LandingScreen() {
           gap: "calc(var(--u)*2.5)",
         }}
       >
-        <span className="pill pill-teal-outline">HeadsUp OS · TABC 2026</span>
+        <span className="pill pill-teal-outline">HeadsUp OS</span>
         <div className="hidden sm:block">
           <VgmLockup size={96} />
         </div>
@@ -118,9 +118,6 @@ export function LandingScreen() {
             See How It Works
           </button>
         </div>
-        <p style={{ color: "var(--mid)", fontSize: 12, margin: 0 }}>
-          Trusted by Dallas Skyline · Lancaster · Duncanville · Crowley · Red Oak
-        </p>
       </div>
 
       {how && (
