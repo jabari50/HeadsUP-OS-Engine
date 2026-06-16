@@ -1,27 +1,28 @@
 "use client";
 
-/* Draft Board (full) — filterable by recommendation
-   (Claude Design prototype: screens-dashboard.jsx → DraftBoardScreen) */
+/* Draft Board — live verified-athlete pool, filterable by OVR-tier
+   recommendation. (Demo mock replaced with the real HU-OS pool.) */
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import { VGM_DATA, type Player } from "@/lib/vgm/data";
+import type { Player } from "@/lib/vgm/data";
+import { useLivePool } from "@/lib/vgm/live-pool";
 import { PlayerCard } from "@/components/vgm/ui";
-import { AddPlayerModal } from "@/components/vgm/modals";
 import { useFlow } from "@/components/vgm/flow";
 
 const FILTERS = ["ALL", "PURSUE", "MONITOR", "EVALUATE", "PASS"] as const;
 
 export default function DraftBoardPage() {
   const router = useRouter();
-  const { st, unlock, addPlayer, toast } = useFlow();
+  const { st, unlock } = useFlow();
+  const { players, loading, error } = useLivePool();
   const [filter, setFilter] = React.useState<(typeof FILTERS)[number]>("ALL");
-  const [showAdd, setShowAdd] = React.useState(false);
 
-  const pool = VGM_DATA.players
-    .filter((p) => p.id !== "kirk" || st.playerAdded)
+  const rated = (players ?? []).filter((p) => p.rated);
+  const awaiting = (players ?? []).length - rated.length;
+  const pool = rated
     .filter((p) => filter === "ALL" || p.rec === filter)
-    .sort((a, b) => b.fit - a.fit);
+    .sort((a, b) => b.ovr - a.ovr);
 
   const openPlayer = (p: Player, unlockIntent: boolean) => {
     if (unlockIntent && !st.unlocked.includes(p.id)) unlock(p.id);
@@ -43,13 +44,12 @@ export default function DraftBoardPage() {
         <div className="t-display text-2xl md:text-3xl" style={{ color: "var(--white)" }}>
           Draft Board
         </div>
-        <button className="btn btn-primary btn-sm" onClick={() => setShowAdd(true)}>
-          + Add Player
-        </button>
+        <span style={{ fontSize: 12, color: "var(--mid)" }}>
+          {players ? `${rated.length} rated · ${players.length} verified` : ""}
+        </span>
       </div>
-      <div
-        style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "calc(var(--u)*2)" }}
-      >
+
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: "calc(var(--u)*2)" }}>
         {FILTERS.map((f) => (
           <button
             key={f}
@@ -61,6 +61,14 @@ export default function DraftBoardPage() {
           </button>
         ))}
       </div>
+
+      {loading && <p style={{ color: "var(--mid)" }}>Loading verified pool…</p>}
+      {error && (
+        <p style={{ color: "var(--amber)" }}>
+          Couldn&apos;t load the pool. Your operator license may be inactive.
+        </p>
+      )}
+
       <div
         className="grid grid-cols-1 md:grid-cols-[repeat(auto-fill,minmax(320px,1fr))]"
         style={{ gap: 12 }}
@@ -75,19 +83,14 @@ export default function DraftBoardPage() {
           />
         ))}
       </div>
-      {pool.length === 0 && (
-        <p style={{ color: "var(--mid)" }}>No players match this filter.</p>
+      {!loading && !error && pool.length === 0 && (
+        <p style={{ color: "var(--mid)" }}>No rated athletes match this filter.</p>
       )}
-
-      {showAdd && (
-        <AddPlayerModal
-          onClose={() => setShowAdd(false)}
-          onAdd={() => {
-            addPlayer();
-            setShowAdd(false);
-            toast("Devan Kirk added — matchmaking ran against your Coach DNA");
-          }}
-        />
+      {!loading && !error && awaiting > 0 && (
+        <p style={{ color: "var(--mid)", fontSize: 12, marginTop: "calc(var(--u)*2)" }}>
+          + {awaiting} verified {awaiting === 1 ? "athlete" : "athletes"} awaiting evaluation
+          (no OVR / Neck Up score yet).
+        </p>
       )}
     </div>
   );
