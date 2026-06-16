@@ -1,0 +1,6 @@
+# The Vercel project's Root Directory is "the-virtual-gm".
+# Upload only that subtree so sibling projects (headsup-os, python engines,
+# data/, storage/, etc.) are never sent to Vercel. node_modules/.git/.next are
+# auto-ignored by the Vercel CLI.
+/*
+!/the-virtual-gm
