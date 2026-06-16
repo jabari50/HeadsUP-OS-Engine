@@ -1,13 +1,12 @@
 "use client";
 
-/* GM Dashboard — roster gaps + live draft-board preview (real verified pool)
-   on the left; RIB brief + operator card on the right. */
+/* Screen 3 — GM Dashboard ("classic" layout from the prototype:
+   roster gaps + draft board preview left, RIB panel + operator card right;
+   single-column feed on mobile) */
 
 import React from "react";
 import { useRouter } from "next/navigation";
-import type { Player } from "@/lib/vgm/data";
-import { VGM_DATA } from "@/lib/vgm/data";
-import { useLivePool } from "@/lib/vgm/live-pool";
+import { VGM_DATA, type Player } from "@/lib/vgm/data";
 import {
   DnaBadge,
   GapCard,
@@ -15,6 +14,7 @@ import {
   PlayerCard,
   SectionHead,
 } from "@/components/vgm/ui";
+import { AddPlayerModal } from "@/components/vgm/modals";
 import { useFlow } from "@/components/vgm/flow";
 
 function RibPanel({ onOpenRib }: { onOpenRib: () => void }) {
@@ -29,13 +29,27 @@ function RibPanel({ onOpenRib }: { onOpenRib: () => void }) {
       >
         This Week&apos;s Brief
       </SectionHead>
-      <ol style={{ margin: 0, padding: 0, listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
+      <ol
+        style={{
+          margin: 0,
+          padding: 0,
+          listStyle: "none",
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+        }}
+      >
         {VGM_DATA.rib.actions.map((a, i) => (
           <li key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
-            <span className="t-display" style={{ color: "var(--teal)", fontSize: 18, lineHeight: 1.2 }}>
+            <span
+              className="t-display"
+              style={{ color: "var(--teal)", fontSize: 18, lineHeight: 1.2 }}
+            >
               {String(i + 1).padStart(2, "0")}
             </span>
-            <span style={{ fontSize: 12.5, color: "rgba(255,255,255,0.85)", lineHeight: 1.5 }}>
+            <span
+              style={{ fontSize: 12.5, color: "rgba(255,255,255,0.85)", lineHeight: 1.5 }}
+            >
               {a}
             </span>
           </li>
@@ -47,10 +61,13 @@ function RibPanel({ onOpenRib }: { onOpenRib: () => void }) {
 
 export default function GmDashboardPage() {
   const router = useRouter();
-  const { st, unlock } = useFlow();
-  const { players, loading } = useLivePool();
+  const { st, unlock, addPlayer, toast } = useFlow();
+  const [showAdd, setShowAdd] = React.useState(false);
 
-  const top = (players ?? []).filter((p) => p.rated).slice(0, 6);
+  const pool = VGM_DATA.players
+    .filter((p) => p.id !== "kirk" || st.playerAdded)
+    .sort((a, b) => b.fit - a.fit);
+  const c = VGM_DATA.coach;
 
   const openPlayer = (p: Player, unlockIntent: boolean) => {
     if (unlockIntent && !st.unlocked.includes(p.id)) unlock(p.id);
@@ -61,14 +78,21 @@ export default function GmDashboardPage() {
     <div>
       <SectionHead
         right={
-          <button className="btn btn-ghost btn-sm" onClick={() => router.push("/gm/draft")}>
-            Full Board →
-          </button>
+          <span style={{ display: "flex", gap: 8 }}>
+            <button className="btn btn-primary btn-sm" onClick={() => setShowAdd(true)}>
+              + Add Player
+            </button>
+            <button
+              className="btn btn-ghost btn-sm"
+              onClick={() => router.push("/gm/draft")}
+            >
+              Full Board →
+            </button>
+          </span>
         }
       >
-        Draft Board — Top {top.length || ""}
+        Draft Board — Top {Math.min(pool.length, 5)}
       </SectionHead>
-      {loading && <p style={{ color: "var(--mid)" }}>Loading verified pool…</p>}
       <div
         style={{
           display: "grid",
@@ -76,7 +100,7 @@ export default function GmDashboardPage() {
           gap: 12,
         }}
       >
-        {top.map((p) => (
+        {pool.slice(0, 5).map((p) => (
           <PlayerCard
             key={p.id}
             p={p}
@@ -92,7 +116,13 @@ export default function GmDashboardPage() {
   const gaps = (
     <div>
       <SectionHead>Roster Gaps</SectionHead>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: 10,
+        }}
+      >
         {VGM_DATA.gaps.map((g) => (
           <GapCard key={g.pos} gap={g} />
         ))}
@@ -113,11 +143,14 @@ export default function GmDashboardPage() {
         }}
       >
         <div>
-          <div className="t-display text-2xl md:text-3xl" style={{ color: "var(--white)" }}>
-            Front Office
+          <div
+            className="t-display text-2xl md:text-3xl"
+            style={{ color: "var(--white)" }}
+          >
+            {c.name}
           </div>
           <div style={{ fontSize: 12, color: "var(--mid)" }}>
-            Verified HU-OS pool · live
+            {c.school} · Season {c.season}
           </div>
         </div>
         <div className="hidden md:block">
@@ -138,6 +171,17 @@ export default function GmDashboardPage() {
           <OperatorCard credits={st.credits} />
         </div>
       </div>
+
+      {showAdd && (
+        <AddPlayerModal
+          onClose={() => setShowAdd(false)}
+          onAdd={() => {
+            addPlayer();
+            setShowAdd(false);
+            toast("Devan Kirk added — matchmaking ran against your Coach DNA");
+          }}
+        />
+      )}
     </div>
   );
 }
