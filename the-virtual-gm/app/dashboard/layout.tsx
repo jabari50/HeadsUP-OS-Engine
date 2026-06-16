@@ -2,10 +2,19 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-const NAV = [
+// Real operator platform (live, auth-gated Supabase data).
+const OPERATOR_NAV = [
   { href: "/dashboard", label: "Roster" },
   { href: "/dashboard/match", label: "Match" },
   { href: "/dashboard/license", label: "License" },
+];
+
+// Front-office workspace (the rich GM experience).
+const FRONT_OFFICE_NAV = [
+  { href: "/gm", label: "Front Office" },
+  { href: "/gm/draft", label: "Draft Board" },
+  { href: "/gm/rib", label: "RIB" },
+  { href: "/wizard", label: "Coach DNA" },
 ];
 
 export default async function DashboardLayout({
@@ -29,8 +38,18 @@ export default async function DashboardLayout({
                 The Virtual <span className="text-gold">GM</span>
               </span>
             </Link>
-            <nav className="flex gap-1">
-              {NAV.map((item) => (
+            <nav className="flex flex-wrap items-center gap-1">
+              {OPERATOR_NAV.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="rounded px-3 py-1.5 font-display text-sm uppercase tracking-wider text-slate-300 transition hover:bg-navy hover:text-teal"
+                >
+                  {item.label}
+                </Link>
+              ))}
+              <span className="mx-1 h-5 w-px bg-navy" aria-hidden />
+              {FRONT_OFFICE_NAV.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}

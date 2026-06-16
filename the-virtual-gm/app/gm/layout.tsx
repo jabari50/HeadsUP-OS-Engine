@@ -15,6 +15,7 @@ const VGM_TABS = [
   { id: "match", href: "/gm/match", label: "Matchmaking", short: "Match", icon: "⇄" },
   { id: "roster", href: "/gm/roster", label: "My Roster", short: "Roster", icon: "▣" },
   { id: "rib", href: "/gm/rib", label: "RIB", short: "RIB", icon: "✦" },
+  { id: "operator", href: "/dashboard", label: "Operator Hub", short: "Operator", icon: "◆" },
 ];
 
 export default function GmLayout({ children }: { children: React.ReactNode }) {
