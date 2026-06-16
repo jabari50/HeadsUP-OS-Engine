@@ -39,8 +39,11 @@ with (security_invoker = on) as
 
 -- The view is security_invoker, so callers still need a row-readable path on
 -- athletes. Grant anon a narrow, public-only SELECT policy scoped to public rows.
+-- Public recruiting profiles are readable by everyone (anon visitors AND any
+-- authenticated user), scoped to published, non-demo rows. The public_athlete_cards
+-- view is security_invoker, so this policy is what lets it resolve for both roles.
 create policy "athletes_anon_public_profile" on public.athletes
-  for select to anon
+  for select to anon, authenticated
   using (profile_public = true and coalesce(is_demo, false) = false);
 
 grant select on public.public_athlete_cards to anon, authenticated;

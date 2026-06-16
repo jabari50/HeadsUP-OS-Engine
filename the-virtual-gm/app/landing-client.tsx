@@ -118,6 +118,17 @@ export function LandingScreen() {
             See How It Works
           </button>
         </div>
+        <Link
+          href="/join"
+          style={{
+            color: "var(--teal)",
+            fontSize: 13,
+            textDecoration: "underline",
+            textUnderlineOffset: 3,
+          }}
+        >
+          Are you an athlete? Get scouted →
+        </Link>
       </div>
 
       {how && (
