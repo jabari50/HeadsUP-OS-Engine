@@ -48,6 +48,16 @@ export default function JoinPage() {
         </p>
 
         <form action={formAction} className="card-dark" style={{ padding: "calc(var(--u)*3)", display: "flex", flexDirection: "column", gap: "calc(var(--u)*2.5)" }}>
+          {/* honeypot — hidden from humans; bots fill it and get rejected */}
+          <input
+            type="text"
+            name="company"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            style={{ position: "absolute", left: "-9999px", width: 1, height: 1, opacity: 0 }}
+          />
+
           {/* bio */}
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <input className="field-dark" name="full_name" placeholder="Full name" required />

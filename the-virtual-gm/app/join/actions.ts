@@ -1,6 +1,8 @@
 "use server";
 
+import { createHash } from "crypto";
 import { createClient } from "@supabase/supabase-js";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import {
   calculateOvr,
@@ -39,6 +41,11 @@ export async function submitIntake(
   _prev: IntakeState,
   formData: FormData
 ): Promise<IntakeState> {
+  // Honeypot — bots fill every field; humans never see this one.
+  if (String(formData.get("company") ?? "").trim() !== "") {
+    return err("Could not submit your profile. Please try again.");
+  }
+
   const fullName = String(formData.get("full_name") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const position = String(formData.get("position") ?? "");
@@ -78,6 +85,25 @@ export async function submitIntake(
   };
 
   const sb = anonClient();
+
+  // Rate limit: max 3 submissions per IP per hour (server-enforced via SECURITY
+  // DEFINER RPC; IP is hashed, never stored raw).
+  const ipRaw =
+    headers().get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    headers().get("x-real-ip") ||
+    "unknown";
+  const ipHash = createHash("sha256")
+    .update(`${ipRaw}:hu-os-intake`)
+    .digest("hex")
+    .slice(0, 40);
+  const { data: allowed, error: rlError } = await sb.rpc(
+    "record_and_check_intake",
+    { p_ip_hash: ipHash, p_max: 3, p_window_minutes: 60 }
+  );
+  if (!rlError && allowed === false) {
+    return err("Too many submissions from your network. Please try again later.");
+  }
+
   const base = slugify(`${fullName}-${gradYear}`) || "athlete";
 
   // Insert, retrying the slug on unique-constraint collisions (23505).

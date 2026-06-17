@@ -31,7 +31,10 @@ export default async function AdminLayout({
             </span>
             <nav className="flex gap-1">
               <Link href="/admin" className="rounded px-3 py-1.5 font-display text-sm uppercase tracking-wider text-slate-300 transition hover:bg-navy hover:text-teal">
-                Review Queue
+                Self-Intake
+              </Link>
+              <Link href="/admin/intel" className="rounded px-3 py-1.5 font-display text-sm uppercase tracking-wider text-slate-300 transition hover:bg-navy hover:text-teal">
+                Intel Prospects
               </Link>
               <Link href="/dashboard" className="rounded px-3 py-1.5 font-display text-sm uppercase tracking-wider text-slate-300 transition hover:bg-navy hover:text-teal">
                 Operator Hub
