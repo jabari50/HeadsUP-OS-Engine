@@ -10,6 +10,7 @@ import {
   NEURAL_FIELDS,
   POSITIONS,
 } from "@/lib/vgm/ovr";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 export type IntakeState = { ok: boolean; message: string } | null;
 
@@ -92,6 +93,15 @@ export async function submitIntake(
     headers().get("x-forwarded-for")?.split(",")[0]?.trim() ||
     headers().get("x-real-ip") ||
     "unknown";
+  // Captcha (Cloudflare Turnstile) — no-op until TURNSTILE_SECRET_KEY is set.
+  const human = await verifyTurnstile(
+    String(formData.get("cf-turnstile-response") ?? "") || null,
+    ipRaw
+  );
+  if (!human) {
+    return err("Verification failed — please complete the challenge and retry.");
+  }
+
   const ipHash = createHash("sha256")
     .update(`${ipRaw}:hu-os-intake`)
     .digest("hex")

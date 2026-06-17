@@ -1,9 +1,12 @@
 "use client";
 
 import React from "react";
+import Script from "next/script";
 import { useFormState, useFormStatus } from "react-dom";
 import { submitIntake, type IntakeState } from "./actions";
 import { TECHNICAL_FIELDS, NEURAL_FIELDS, POSITIONS } from "@/lib/vgm/ovr";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 function Slider({ name, label }: { name: string; label: string }) {
   const [v, setV] = React.useState(5);
@@ -94,6 +97,21 @@ export default function JoinPage() {
             <div className="t-label" style={{ marginBottom: 10 }}>Physical / Athletic Output (1–10)</div>
             <Slider name="physical" label="Overall physical / athleticism" />
           </div>
+
+          {TURNSTILE_SITE_KEY && (
+            <>
+              <Script
+                src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                async
+                defer
+              />
+              <div
+                className="cf-turnstile"
+                data-sitekey={TURNSTILE_SITE_KEY}
+                data-theme="dark"
+              />
+            </>
+          )}
 
           {state && !state.ok && (
             <p className="t-mono" style={{ fontSize: 12, color: "var(--amber)" }}>{state.message}</p>
