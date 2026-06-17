@@ -1,23 +1,15 @@
 "use client";
 
-/* Screen 4/5 — Fit Score Card (full view) with dimension breakdown,
-   comp player rail, GM rationale (Claude Design prototype:
-   screens-match.jsx → FitScoreScreen) */
+/* Player Detail — live verified athlete: real OVR + Neck Up attribute profile.
+   The relational Fit Score vs Coach DNA is matchmaking IP (not yet wired), so it
+   is shown as "pending Coach DNA", not fabricated. */
 
 import React from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { VGM_DATA } from "@/lib/vgm/data";
-import {
-  AthleteDnaBadge,
-  BarFill,
-  DimRow,
-  DnaBadge,
-  RecBadge,
-  SectionHead,
-} from "@/components/vgm/ui";
-import { InviteModal } from "@/components/vgm/modals";
-import { useFlow } from "@/components/vgm/flow";
+import { useParams, useRouter } from "next/navigation";
+import { useLivePlayer } from "@/lib/vgm/live-pool";
 import { useAlumniComps, type AlumniComp } from "@/lib/vgm/live-comps";
+import { BarFill, DnaBadge, RecBadge, SectionHead } from "@/components/vgm/ui";
+import { useFlow } from "@/components/vgm/flow";
 
 function AlumniCompCard({ a }: { a: AlumniComp }) {
   return (
@@ -36,14 +28,8 @@ function AlumniCompCard({ a }: { a: AlumniComp }) {
         </div>
       </div>
       <div style={{ fontSize: 12, color: "var(--dark)", lineHeight: 1.5 }}>
-        <span className="t-label" style={{ display: "block", marginBottom: 2 }}>
-          Outcome
-        </span>
-        {a.college ? (
-          <>College: <strong>{a.college}</strong>
-            <br />
-          </>
-        ) : null}
+        <span className="t-label" style={{ display: "block", marginBottom: 2 }}>Outcome</span>
+        {a.college ? (<>College: <strong>{a.college}</strong><br /></>) : null}
         {a.org ? <>Now: {a.org}</> : null}
       </div>
       {a.level && (
@@ -55,293 +41,141 @@ function AlumniCompCard({ a }: { a: AlumniComp }) {
   );
 }
 
-function InsufficientSampleAlert() {
-  const [open, setOpen] = React.useState(true);
-  return (
-    <div
-      style={{
-        background: "rgba(245,158,11,0.95)",
-        color: "#2d2305",
-        borderRadius: 8,
-        padding: open ? "12px 16px" : "8px 16px",
-        fontSize: 12.5,
-      }}
-    >
-      <button
-        onClick={() => setOpen(!open)}
-        style={{
-          background: "none",
-          border: "none",
-          padding: 0,
-          fontWeight: 700,
-          fontSize: 12.5,
-          color: "#2d2305",
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          width: "100%",
-        }}
-      >
-        <span>⚠️ Coach DNA — Stated Only</span>
-        <span style={{ marginLeft: "auto" }}>{open ? "−" : "+"}</span>
-      </button>
-      {open && (
-        <div style={{ marginTop: 6, lineHeight: 1.5 }}>
-          Fingerprint enrichment requires 15+ historical recruits. Using wizard
-          inputs — score may be less precise.
-          <button
-            className="btn btn-sm"
-            style={{ marginLeft: 10, background: "#2d2305", color: "#fcd34d", border: "none" }}
-          >
-            View What&apos;s Missing
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function FitScorePage() {
+export default function PlayerDetailPage() {
   const router = useRouter();
   const params = useParams<{ id: string }>();
-  const search = useSearchParams();
-  const { st, unlock, toast } = useFlow();
-  const [showInvite, setShowInvite] = React.useState(false);
+  const { st, toast } = useFlow();
+  const { player: p, loading, error } = useLivePlayer(params.id);
+  const { comps: alumni } = useAlumniComps(p?.pos);
 
-  const p =
-    VGM_DATA.players.find((x) => x.id === params.id) ?? VGM_DATA.players[0];
-  const justUpgraded = search.get("upgraded") === "1";
+  const back = (
+    <button className="btn btn-ghost btn-sm" style={{ marginBottom: 14 }} onClick={() => router.push("/gm/draft")}>
+      ← Back to Draft Board
+    </button>
+  );
 
-  const isKirk = p.id === "kirk";
-  const eightDim = isKirk && st.athleteDna;
-  const fit = eightDim ? p.fit : p.fit5;
-  const dims = VGM_DATA.dimMeta.filter(
-    (m) => eightDim || VGM_DATA.baseDims.includes(m.id)
-  );
-  const lockedDims = VGM_DATA.dimMeta.filter(
-    (m) => !eightDim && !VGM_DATA.baseDims.includes(m.id)
-  );
-  const unlocked = st.unlocked.includes(p.id);
-  const { comps: alumni, loading: alumniLoading } = useAlumniComps(p.pos);
+  if (loading) {
+    return <div className="fade-in" style={{ maxWidth: 780, margin: "0 auto" }}>{back}<p style={{ color: "var(--mid)" }}>Loading athlete…</p></div>;
+  }
+  if (error || !p) {
+    return (
+      <div className="fade-in" style={{ maxWidth: 780, margin: "0 auto" }}>
+        {back}
+        <p style={{ color: "var(--mid)" }}>Athlete not found in your verified pool.</p>
+      </div>
+    );
+  }
+
+  const tags = p.compShort && p.compShort !== "—" ? p.compShort.split(" · ") : [];
 
   return (
     <div className="fade-in" style={{ maxWidth: 780, margin: "0 auto" }}>
-      <button
-        className="btn btn-ghost btn-sm"
-        style={{ marginBottom: 14 }}
-        onClick={() => router.push("/gm")}
-      >
-        ← Back
-      </button>
+      {back}
 
-      <div
-        className="card-dark accent p-5 md:p-8"
-        style={{ display: "flex", flexDirection: "column", gap: "calc(var(--u)*3)" }}
-      >
-        {/* athlete header */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: 16,
-            flexWrap: "wrap",
-            alignItems: "flex-start",
-          }}
-        >
+      <div className="card-dark accent p-5 md:p-8" style={{ display: "flex", flexDirection: "column", gap: "calc(var(--u)*3)" }}>
+        {/* header */}
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 16, flexWrap: "wrap", alignItems: "flex-start" }}>
           <div>
             <div className="t-display text-3xl md:text-[42px]" style={{ lineHeight: 1 }}>
               {p.name}
             </div>
             <div style={{ fontSize: 13, color: "var(--mid)", marginTop: 6 }}>
-              {p.pos} · {p.height} · Class {p.classYear} · {p.school}
+              {[p.pos, p.classYear !== "—" ? `Class ${p.classYear}` : null, p.school]
+                .filter(Boolean)
+                .join(" · ")}
+              {p.gpa ? ` · GPA ${p.gpa}` : ""}
             </div>
             <div style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", marginTop: 3 }}>
-              Archetype: <strong>{p.archetype}</strong> · {p.stats}
+              Market Read: <strong>{p.archetype}</strong>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-            <div style={{ textAlign: "center" }}>
-              <div className="t-label">OVR</div>
-              <div
-                className="t-display"
-                style={{ fontSize: 44, color: "var(--teal)", lineHeight: 1 }}
-              >
-                {p.ovr}
-              </div>
-              <span className="pill pill-teal-outline" style={{ fontSize: 10 }}>
-                {p.tier} Tier
-              </span>
+          <div style={{ textAlign: "center" }}>
+            <div className="t-label">OVR</div>
+            <div className="t-display" style={{ fontSize: 44, color: "var(--teal)", lineHeight: 1 }}>
+              {p.ovr}
             </div>
+            <span className="pill pill-teal-outline" style={{ fontSize: 10 }}>
+              {p.tier} confidence
+            </span>
           </div>
         </div>
 
-        {/* fit score */}
+        {/* fit (OVR baseline) */}
         <div>
           <SectionHead>Fit Score</SectionHead>
-          {justUpgraded && (
-            <div className="pill pill-teal" style={{ marginBottom: 10 }}>
-              🔍 Athlete DNA redeemed — upgraded to 8 dimensions (+{p.fit - p.fit5})
-            </div>
-          )}
           <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <BarFill pct={fit} height={14} />
-            <span
-              className="t-display"
-              style={{ fontSize: 38, color: "var(--white)", whiteSpace: "nowrap" }}
-            >
-              {fit} <span style={{ fontSize: 20, color: "var(--mid)" }}>/ 100</span>
+            <BarFill pct={p.fit} height={14} />
+            <span className="t-display" style={{ fontSize: 38, color: "var(--white)", whiteSpace: "nowrap" }}>
+              {p.fit} <span style={{ fontSize: 20, color: "var(--mid)" }}>/ 100</span>
             </span>
           </div>
-          <div
-            style={{
-              display: "flex",
-              gap: 8,
-              flexWrap: "wrap",
-              marginTop: 12,
-              alignItems: "center",
-            }}
-          >
-            <span
-              className="t-mono"
-              style={{
-                fontSize: 10,
-                padding: "3px 9px",
-                borderRadius: 4,
-                background: "var(--navy-deep)",
-                color: "var(--teal)",
-                border: "1px solid var(--line-dark)",
-              }}
-            >
-              {eightDim ? "8-DIMENSION" : "5-DIMENSION"}
-            </span>
-            <DnaBadge status={st.dnaStatus} onClick={() => router.push("/wizard")} />
-            <AthleteDnaBadge active={eightDim} />
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 12, alignItems: "center" }}>
             <RecBadge rec={p.rec} />
+            <DnaBadge status={st.dnaStatus} onClick={() => router.push("/wizard")} />
+            <span style={{ fontSize: 11.5, color: "var(--mid)" }}>
+              Showing Overall — program-specific Fit unlocks when Coach DNA is set.
+            </span>
           </div>
         </div>
 
-        {st.dnaStatus === "stated" && <InsufficientSampleAlert />}
-
-        {/* dimension breakdown */}
+        {/* neck up attribute profile (real) */}
         <div>
-          <SectionHead>Dimension Breakdown</SectionHead>
+          <SectionHead>Neck Up Profile</SectionHead>
           <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-            {dims.map((m, i) => (
-              <DimRow key={m.id} meta={m} value={p.dims[m.id]} delay={i * 70} />
+            {p.neckUp.map((row, i) => (
+              <div
+                key={row.label}
+                style={{ display: "grid", gridTemplateColumns: "minmax(120px, 168px) 1fr 64px", alignItems: "center", gap: 12 }}
+              >
+                <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>
+                  {row.label}
+                </span>
+                <BarFill pct={row.value * 10} delay={i * 60} />
+                <span className="t-mono" style={{ fontSize: 12, textAlign: "right", color: "rgba(255,255,255,0.6)" }}>
+                  {row.value.toFixed(1)} / 10
+                </span>
+              </div>
             ))}
           </div>
-          {lockedDims.length > 0 && (
-            <div
-              style={{
-                marginTop: 14,
-                border: "1px dashed rgba(255,255,255,0.25)",
-                borderRadius: 8,
-                padding: "14px 16px",
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                gap: 12,
-                flexWrap: "wrap",
-              }}
-            >
-              <div style={{ fontSize: 12.5, color: "var(--mid)", lineHeight: 1.5 }}>
-                <strong style={{ color: "rgba(255,255,255,0.85)" }}>
-                  🔒 {lockedDims.length} dimensions locked
-                </strong>
-                <br />
-                {lockedDims.map((m) => m.label).join(" · ")} unlock when{" "}
-                {isKirk ? p.name.split(" ")[0] : "the athlete"} redeems an Athlete
-                DNA invite.
-              </div>
-              {isKirk && (
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={() => setShowInvite(true)}
-                >
-                  Issue Invite Code
-                </button>
-              )}
-            </div>
-          )}
         </div>
+
+        {/* tags */}
+        {tags.length > 0 && (
+          <div>
+            <SectionHead>Scouting Tags</SectionHead>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {tags.map((t) => (
+                <span key={t} className="pill pill-gray">{t}</span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* comp players — real DFW alumni outcomes */}
-        <div>
-          <SectionHead>Comp Players — Alumni Outcomes</SectionHead>
-          {alumniLoading ? (
-            <div style={{ fontSize: 12.5, color: "var(--mid)" }}>Loading alumni comps…</div>
-          ) : alumni.length === 0 ? (
-            <div
-              style={{
-                border: "1px dashed rgba(255,255,255,0.25)",
-                borderRadius: 8,
-                padding: "16px",
-                fontSize: 12.5,
-                color: "var(--mid)",
-              }}
-            >
-              No alumni comps found for this position yet.
+        {alumni.length > 0 && (
+          <div>
+            <SectionHead>Comp Players — Alumni Outcomes</SectionHead>
+            <div className="comp-rail dark-scroll">
+              {alumni.map((a) => (
+                <AlumniCompCard key={a.id} a={a} />
+              ))}
             </div>
-          ) : (
-            <>
-              <div className="comp-rail dark-scroll">
-                {alumni.map((a) => (
-                  <AlumniCompCard key={a.id} a={a} />
-                ))}
-              </div>
-              <p style={{ fontSize: 11, color: "var(--mid)", marginTop: 8 }}>
-                Real DFW alumni at this position — where they actually landed.
-              </p>
-            </>
-          )}
-        </div>
-
-        {/* rationale */}
-        <div>
-          <SectionHead>GM Rationale</SectionHead>
-          <p
-            style={{
-              fontSize: 13.5,
-              lineHeight: 1.65,
-              color: "rgba(255,255,255,0.88)",
-              margin: 0,
-              textWrap: "pretty",
-            }}
-          >
-            {p.rationale}
-          </p>
-        </div>
+            <p style={{ fontSize: 11, color: "var(--mid)", marginTop: 8 }}>
+              Real DFW alumni at this position — where they actually landed.
+            </p>
+          </div>
+        )}
 
         {/* actions */}
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            flexWrap: "wrap",
-            borderTop: "1px solid var(--line-dark)",
-            paddingTop: "calc(var(--u)*2.5)",
-          }}
-        >
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", borderTop: "1px solid var(--line-dark)", paddingTop: "calc(var(--u)*2.5)" }}>
           <button className="btn btn-ghost" onClick={() => toast("Added to Monitor list")}>
             Monitor
           </button>
-          <button
-            className="btn btn-primary"
-            disabled={unlocked}
-            onClick={() => unlock(p.id)}
-          >
-            {unlocked ? "✓ Unlocked" : "Full Unlock — 1 credit"}
-          </button>
-          <button
-            className="btn btn-ghost"
-            onClick={() => toast("Contact request sent to " + p.school)}
-          >
+          <button className="btn btn-primary" onClick={() => toast("Contact request sent to " + p.school)}>
             Contact Coach
           </button>
         </div>
       </div>
-
-      {showInvite && <InviteModal onClose={() => setShowInvite(false)} />}
     </div>
   );
 }

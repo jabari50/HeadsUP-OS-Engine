@@ -28,6 +28,13 @@ export default async function DashboardLayout({
   } = await supabase.auth.getUser();
   if (!user) redirect("/login");
 
+  const { data: adminRole } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", user.id)
+    .eq("role", "super_admin")
+    .maybeSingle();
+
   return (
     <div className="min-h-screen">
       <header className="border-b border-navy bg-card">
@@ -58,6 +65,14 @@ export default async function DashboardLayout({
                   {item.label}
                 </Link>
               ))}
+              {adminRole && (
+                <Link
+                  href="/admin"
+                  className="rounded px-3 py-1.5 font-display text-sm uppercase tracking-wider text-gold transition hover:bg-navy"
+                >
+                  Admin
+                </Link>
+              )}
             </nav>
           </div>
           <div className="flex items-center gap-4">
