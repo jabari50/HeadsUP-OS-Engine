@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: headsup-os-engine
+    name: headsup-os-engine-v4
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt
