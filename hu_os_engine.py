@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from nda_router import nda_router
+from athlete_api import router as athlete_router
 
 app = FastAPI(
     title="HeadsUp OS Engine",
@@ -31,6 +32,9 @@ app.add_middleware(
 
 # ── Mount NDA router ──────────────────────────────────────────────────────────
 app.include_router(nda_router, prefix="/api/v1/nda", tags=["Neural Data Agency"])
+
+# ── Mount Athlete Onboarding router (/api/v1/athletes, incl. /score) ──────────
+app.include_router(athlete_router)
 
 # ── Root health check ─────────────────────────────────────────────────────────
 @app.get("/health")
