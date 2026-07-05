@@ -1,0 +1,299 @@
+{
+  "generated_at": "2026-07-05T14:27:16.930788+00:00",
+  "engine": "headsup-portal/engine",
+  "summary": {
+    "total": 34,
+    "passed": 34,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_85.0",
+      "input": "ovr=85.0",
+      "expected": "Elite",
+      "actual": "Elite",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_84.9",
+      "input": "ovr=84.9",
+      "expected": "Impact",
+      "actual": "Impact",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_70.0",
+      "input": "ovr=70.0",
+      "expected": "Impact",
+      "actual": "Impact",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_69.9",
+      "input": "ovr=69.9",
+      "expected": "Contributor",
+      "actual": "Contributor",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_55.0",
+      "input": "ovr=55.0",
+      "expected": "Contributor",
+      "actual": "Contributor",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_54.9",
+      "input": "ovr=54.9",
+      "expected": "Developing",
+      "actual": "Developing",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_40.0",
+      "input": "ovr=40.0",
+      "expected": "Developing",
+      "actual": "Developing",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_39.9",
+      "input": "ovr=39.9",
+      "expected": "Prospect",
+      "actual": "Prospect",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_1.0",
+      "input": "ovr=1.0",
+      "expected": "Prospect",
+      "actual": "Prospect",
+      "pass": true
+    },
+    {
+      "suite": "tier_boundaries",
+      "case": "ovr_99.0",
+      "input": "ovr=99.0",
+      "expected": "Elite",
+      "actual": "Elite",
+      "pass": true
+    },
+    {
+      "suite": "scale",
+      "case": "technical_floor",
+      "input": "raw=1",
+      "expected": 1.0,
+      "actual": 1.0,
+      "pass": true
+    },
+    {
+      "suite": "scale",
+      "case": "technical_ceiling",
+      "input": "raw=10",
+      "expected": 99.0,
+      "actual": 99.0,
+      "pass": true
+    },
+    {
+      "suite": "scale",
+      "case": "technical_midpoint",
+      "input": "raw=5.5",
+      "expected": 50.0,
+      "actual": 50.0,
+      "pass": true
+    },
+    {
+      "suite": "scale",
+      "case": "ovr_ceiling_clamped",
+      "input": "all inputs at max",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "suite": "scale",
+      "case": "ovr_floor_clamped",
+      "input": "all inputs at min",
+      "expected": true,
+      "actual": true,
+      "pass": true
+    },
+    {
+      "suite": "benchmarks",
+      "case": "portal_anchor_ovr",
+      "input": "locked anchor vector",
+      "expected": 78.7,
+      "actual": 78.7,
+      "pass": true
+    },
+    {
+      "suite": "benchmarks",
+      "case": "portal_anchor_tier",
+      "input": "locked anchor vector",
+      "expected": "Impact",
+      "actual": "Impact",
+      "pass": true
+    },
+    {
+      "suite": "benchmarks",
+      "case": "boone_canonical_ovr",
+      "input": "BOONE_CANONICAL constant",
+      "expected": 82.36,
+      "actual": 82.36,
+      "pass": true
+    },
+    {
+      "suite": "pro_quest_gate",
+      "case": "gate_constant",
+      "input": "PRO_QUEST_NEURAL_GATE",
+      "expected": 80.0,
+      "actual": 80.0,
+      "pass": true
+    },
+    {
+      "suite": "pro_quest_gate",
+      "case": "just_below_fires",
+      "input": "composure=79.9",
+      "expected": [
+        "neural.composure"
+      ],
+      "actual": [
+        "neural.composure"
+      ],
+      "pass": true
+    },
+    {
+      "suite": "pro_quest_gate",
+      "case": "at_gate_silent",
+      "input": "composure=80.0",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "suite": "pro_quest_gate",
+      "case": "just_above_silent",
+      "input": "composure=80.1",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "suite": "pro_quest_gate",
+      "case": "multi_marker_weakest_first",
+      "input": "composure=62 iq=79 resilience=45",
+      "expected": [
+        "neural.resilience",
+        "neural.composure",
+        "neural.iq"
+      ],
+      "actual": [
+        "neural.resilience",
+        "neural.composure",
+        "neural.iq"
+      ],
+      "pass": true
+    },
+    {
+      "suite": "pro_quest_gate",
+      "case": "all_at_gate_silent",
+      "input": "all six markers = 80",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "suite": "missing_data",
+      "case": "empty_player_no_quests",
+      "input": "player_data={}",
+      "expected": [],
+      "actual": [],
+      "pass": true
+    },
+    {
+      "suite": "missing_data",
+      "case": "none_marker_skipped",
+      "input": "composure=None iq=70",
+      "expected": [
+        "neural.iq"
+      ],
+      "actual": [
+        "neural.iq"
+      ],
+      "pass": true
+    },
+    {
+      "suite": "adversarial",
+      "case": "valid_payload_accepted",
+      "input": "anchor intake",
+      "expected": "accepted",
+      "actual": "accepted",
+      "pass": true
+    },
+    {
+      "suite": "adversarial",
+      "case": "score_injection_top_level",
+      "input": "ovr=99 injected",
+      "expected": "rejected",
+      "actual": "rejected",
+      "pass": true
+    },
+    {
+      "suite": "adversarial",
+      "case": "score_injection_nested",
+      "input": "neural.ovr=99 injected",
+      "expected": "rejected",
+      "actual": "rejected",
+      "pass": true
+    },
+    {
+      "suite": "adversarial",
+      "case": "enum_violation",
+      "input": "position=POINT",
+      "expected": "rejected",
+      "actual": "rejected",
+      "pass": true
+    },
+    {
+      "suite": "adversarial",
+      "case": "bounds_violation",
+      "input": "shooting=11",
+      "expected": "rejected",
+      "actual": "rejected",
+      "pass": true
+    },
+    {
+      "suite": "adversarial",
+      "case": "negative_score",
+      "input": "shooting=-5",
+      "expected": "rejected",
+      "actual": "rejected",
+      "pass": true
+    },
+    {
+      "suite": "adversarial",
+      "case": "cross_field_height",
+      "input": "height_inches=80 vs 6'2\"",
+      "expected": "rejected",
+      "actual": "rejected",
+      "pass": true
+    },
+    {
+      "suite": "adversarial",
+      "case": "type_confusion",
+      "input": "shooting='nine'",
+      "expected": "rejected",
+      "actual": "rejected",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-paper font-body text-ink antialiased;
+}
+
+h1 {
+  @apply font-display uppercase tracking-wide;
+}
+
+@layer components {
+  /* signature five-color gradient stripe */
+  .stripe {
+    height: 4px;
+    background: linear-gradient(90deg, #1d9e75 0%, #378add 30%, #7f77dd 60%, #d4537e 80%, #d85a30 100%);
+  }
+
+  .sec-label {
+    @apply mb-2 mt-4 font-display text-[10px] font-bold uppercase tracking-[3px] text-slate-500;
+  }
+
+  .panel {
+    @apply rounded-xl border border-edge2 bg-panel p-4;
+  }
+
+  .stat {
+    @apply font-display text-4xl font-extrabold leading-none text-hgreen;
+  }
+
+  .btn {
+    @apply rounded-md bg-hgreen px-4 py-2 font-display text-sm font-bold uppercase tracking-wider text-white hover:opacity-90 disabled:opacity-40;
+  }
+
+  .input {
+    @apply w-full rounded-md border border-edge bg-white px-3 py-2 text-sm text-ink placeholder:text-slate-500 focus:border-hgreen focus:outline-none;
+  }
+
+  .th {
+    @apply px-3 py-2 text-left font-display text-[10px] font-bold uppercase tracking-[1.5px] text-slate-500;
+  }
+
+  .td {
+    @apply border-t border-edge px-3 py-2 text-sm;
+  }
+}
+
+/* ─── ecosystem ticker overlay ─────────────────────────────────────────── */
+.ticker-shell {
+  @apply fixed inset-x-0 bottom-0 z-50 border-t border-edge2 bg-panel;
+}
+
+.ticker-viewport {
+  @apply overflow-hidden whitespace-nowrap;
+}
+
+.ticker-track {
+  display: inline-flex;
+  align-items: center;
+  animation: ticker-scroll 90s linear infinite;
+  will-change: transform;
+}
+
+.ticker-shell:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+.ticker-item {
+  @apply inline-flex items-baseline gap-2 px-5 py-2.5;
+}
+
+.ticker-label {
+  @apply font-display text-[10px] font-bold uppercase tracking-[2px] text-slate-500;
+}
+
+.ticker-value {
+  @apply font-display text-lg font-extrabold leading-none;
+}
+
+.ticker-dot {
+  @apply text-edge2;
+}
+
+@keyframes ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track {
+    animation: none;
+  }
+}

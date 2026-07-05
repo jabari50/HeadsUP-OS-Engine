@@ -62,6 +62,8 @@ export default function IngestionCommandCenter({ accessToken }) {
   }, [authHeaders, statusFilter, log]);
 
   useEffect(() => {
+    // setState here runs after the awaited fetch resolves, not synchronously in the effect body
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadPool();
   }, [loadPool]);
 

@@ -1,0 +1,13 @@
+# Render blueprint for the stateless scoring engine.
+# ONLY env var: HU_ENGINE_SECRET (must equal the Vercel value exactly).
+# No Supabase, no Stripe, no LLM keys on this box — Gate 1 (U6).
+services:
+  - type: web
+    name: headsup-portal-engine
+    runtime: python
+    pythonVersion: "3.12.7"
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn hu_os_api_v4:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: HU_ENGINE_SECRET
+        sync: false

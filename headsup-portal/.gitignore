@@ -1,0 +1,16 @@
+# Dependencies / build output
+node_modules/
+.next/
+tsconfig.tsbuildinfo
+next-env.d.ts
+
+# Test caches
+.pytest_cache/
+__pycache__/
+
+# Local env (root .gitignore also covers .env*)
+.env.local
+
+# Real-athlete PII — lives in Supabase only, never in git (Gate 8)
+supabase/seed_pipeline.sql
+supabase/seed_athletes_compact.sql
