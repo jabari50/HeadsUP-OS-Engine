@@ -13,3 +13,19 @@ services:
         sync: false
       - key: FRONTEND_URL
         value: https://the-virtual-gm.vercel.app
+
+  # Unified Portal scoring engine — stateless, HMAC-authed (handoff v1.1 §2/U6).
+  # ONLY secret on this box is HU_ENGINE_SECRET; must equal the Vercel value.
+  - type: web
+    name: headsup-portal-engine
+    runtime: python
+    plan: free
+    rootDir: headsup-portal/engine
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn hu_os_api_v4:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: HU_ENGINE_SECRET
+        sync: false
