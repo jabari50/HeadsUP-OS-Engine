@@ -1,17 +1,12 @@
-/* Session refresh + portal route protection. Anything under the command
-   center requires a signed-in user; role enforcement happens per-route. */
+/* Session refresh + REV-A surface routing. Every surface prefix requires a
+   signed-in user; the role in app_metadata (server-controlled — never
+   user_metadata) picks which surface the user may enter. This routing is
+   convenience only: a misrouted request must still fail at RLS. */
 
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const PROTECTED_PREFIXES = [
-  "/dashboard",
-  "/intake",
-  "/draft-board",
-  "/roster",
-  "/matchmaking",
-  "/athletes",
-];
+import { homeForRole, roleMayEnter, surfaceForPath } from "@/lib/surfaces";
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });
@@ -37,14 +32,22 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const needsAuth = PROTECTED_PREFIXES.some((prefix) =>
-    request.nextUrl.pathname.startsWith(prefix)
-  );
-  if (needsAuth && !user) {
+  const surface = surfaceForPath(request.nextUrl.pathname);
+  if (!surface) return response;
+
+  if (!user) {
     const login = request.nextUrl.clone();
     login.pathname = "/auth/login";
     login.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(login);
+  }
+
+  const role = (user.app_metadata?.role as string | undefined) ?? "";
+  if (!roleMayEnter(role, surface)) {
+    const home = request.nextUrl.clone();
+    home.pathname = homeForRole(role);
+    home.search = "";
+    return NextResponse.redirect(home);
   }
 
   return response;
