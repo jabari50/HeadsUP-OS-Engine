@@ -27,19 +27,21 @@ export function surfaceForPath(pathname: string): Surface | null {
   return null;
 }
 
-/* System_Admin (Jabari review layer) may enter every surface. */
+/* System_Admin (Jabari review layer) may enter every surface.
+   "" (fresh /join signup, no app_metadata.role yet) gets the athlete
+   surface: least privilege — athlete RLS is user_id-scoped, so a roleless
+   account can only ever read the row it self-enrolled. Operator and admin
+   surfaces always require an explicit provisioned role. */
 export function roleMayEnter(role: string, surface: Surface): boolean {
   if (role === "System_Admin") return true;
-  if (surface === "athlete") return role === "Athlete";
+  if (surface === "athlete") return role === "Athlete" || role === "";
   if (surface === "operator") return OPERATOR_ROLES.includes(role);
   return false;
 }
 
-/* Where a signed-in user lands when they hit a surface that isn't theirs.
-   Roleless-but-authenticated users go to the public root — never a loop. */
+/* Where a signed-in user lands when they hit a surface that isn't theirs. */
 export function homeForRole(role: string): string {
-  if (role === "Athlete") return "/me";
   if (OPERATOR_ROLES.includes(role)) return "/dashboard";
   if (role === "System_Admin") return "/dashboard";
-  return "/";
+  return "/me";
 }

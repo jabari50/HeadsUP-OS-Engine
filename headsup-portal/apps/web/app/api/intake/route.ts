@@ -17,12 +17,14 @@ export const dynamic = "force-dynamic";
 const RATE_LIMIT_WINDOW_MINUTES = 10;
 const RATE_LIMIT_MAX_SESSIONS = 10;
 
-/* Least privilege: each role may only feed its own sources (§6.1). */
+/* Least privilege: each role may only feed its own sources (§6.1).
+   "" = fresh /join signup (no app_metadata.role yet) — self-enrollment only. */
 const SOURCES_BY_ROLE: Record<string, string[]> = {
   System_Admin: ["scout_manual", "combine_csv", "free_agents", "ner_anchor", "film_event"],
   College_Scout: ["scout_manual", "combine_csv"],
   Coach: ["ner_anchor", "film_event", "scout_manual"],
   Athlete: ["free_agents"],
+  "": ["free_agents"],
 };
 
 const bodySchema = z.object({
@@ -123,16 +125,23 @@ export async function POST(request: NextRequest) {
 
     await db.from("intake_sessions").update({ status: "validated" }).eq("id", session.id);
 
+    /* Self-enrollment link (migration 0007): only a free-agents submission by
+       the athlete themselves stamps user_id on a NEWLY created row. Set here
+       server-side — any link_self arriving in engine output is discarded. */
+    const selfEnrollment =
+      source === "free_agents" && (auth.role === "Athlete" || auth.role === "");
+
     const processOne = async (
       canonical: Record<string, unknown>,
       computed: { ovr: number; tier: string } | null | undefined,
       badges: unknown[] | undefined,
       quests: unknown[] | undefined
     ) => {
+      const { link_self: _discarded, ...cleanCanonical } = canonical;
       const { data, error } = await db.rpc("process_intake", {
         p_session: session.id,
         p_actor: auth.user.id,
-        p_canonical: canonical,
+        p_canonical: selfEnrollment ? { ...cleanCanonical, link_self: "true" } : cleanCanonical,
         p_computed: computed ?? {},
         p_badges: badges ?? [],
         p_quests: quests ?? [],

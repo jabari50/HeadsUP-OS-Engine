@@ -33,7 +33,7 @@ export default async function AthleteLayout({ children }: { children: React.Reac
           <div className="rounded-lg border border-edge px-3 py-2 text-right text-xs">
             <div className="text-slate-400">{auth.user.email}</div>
             <div className="mt-0.5 font-display font-bold uppercase tracking-wider text-hgreen">
-              {auth.role || "No role assigned"}
+              {auth.role || "Free Agent"}
             </div>
           </div>
         </div>
