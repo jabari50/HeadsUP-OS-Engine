@@ -27,38 +27,8 @@ function Mega({ value, label, color }: { value: number | string; label: string; 
 export default async function DashboardPage() {
   const auth = await getAuth();
   if (!auth) redirect("/auth/login");
-
-  if (auth.role === "Athlete") {
-    const { data: me } = await serviceClient()
-      .from("athletes")
-      .select("id, name, ovr, tier, activation_state")
-      .eq("user_id", auth.user.id)
-      .maybeSingle();
-    return (
-      <div>
-        <div className="sec-label">My PRO-File</div>
-        <div className="panel max-w-md">
-          {me ? (
-            <>
-              <div className="font-display text-lg font-bold uppercase">{me.name}</div>
-              <div className="mt-2 text-sm text-slate-400">
-                OVR <span className="stat text-hgreen">{me.ovr ?? "—"}</span>{" "}
-                <span className="ml-2">{me.tier ?? "Unscored"}</span>
-              </div>
-              <div className="mt-2 text-xs text-slate-400">Status: {me.activation_state}</div>
-              <a className="btn mt-4 inline-block" href={`/athletes/${me.id}`}>
-                View full profile
-              </a>
-            </>
-          ) : (
-            <p className="text-sm text-slate-400">
-              No profile yet — submit a Free Agent enrollment from the Intake tab.
-            </p>
-          )}
-        </div>
-      </div>
-    );
-  }
+  // Athletes never reach this page — middleware routes them to /me, where
+  // the Athlete Surface renders their PRO-File without operator fields.
 
   const operator = await getOperator(auth.user.id);
   const isAdmin = auth.role === "System_Admin";
