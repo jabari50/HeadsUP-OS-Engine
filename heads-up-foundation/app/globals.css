@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  @apply bg-navy text-white font-body antialiased;
+}
+
+::selection {
+  background: #00c896;
+  color: #112240;
+}
+
+/* Teal structural rule — the recurring brand device */
+.rule-teal {
+  @apply block h-[3px] w-16 bg-teal;
+}
+
+/* Scroll reveal (activated by <Reveal/>) */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Needs-input placeholder marker */
+.needs-input {
+  @apply border border-dashed border-gold/60 bg-gold/5 text-gold/90 px-3 py-2 text-sm font-body;
+}
