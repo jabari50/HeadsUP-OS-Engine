@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HeadsUP OS — Academy Suite</title>
+<style>
+  :root {
+    --navy: #112240; --navy-2: #0a1830; --navy-3: #1a325c;
+    --teal: #00c896; --teal-dim: #00c89633;
+    --gold: #f5b942; --red: #ff5470; --text: #eaf2ff; --muted: #8fa4c4;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--navy-2); color: var(--text); min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  header {
+    background: var(--navy); border-bottom: 2px solid var(--teal);
+    padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  header h1 { font-size: 1.15rem; letter-spacing: 1px; }
+  header h1 span { color: var(--teal); }
+  .hud { display: flex; gap: 18px; font-size: .85rem; }
+  .hud b { color: var(--teal); }
+  nav { display: flex; gap: 4px; background: var(--navy); padding: 0 24px 12px; flex-wrap: wrap; }
+  nav button {
+    background: var(--navy-3); color: var(--muted); border: 1px solid transparent;
+    padding: 8px 16px; border-radius: 8px 8px 0 0; cursor: pointer; font-size: .85rem;
+  }
+  nav button.on { color: var(--text); border-color: var(--teal); background: var(--navy-2); }
+  main { max-width: 1080px; margin: 0 auto; padding: 24px 20px 60px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+  .card {
+    background: var(--navy); border: 1px solid var(--navy-3); border-radius: 12px;
+    padding: 18px; display: flex; flex-direction: column; gap: 8px;
+  }
+  .card h3 { font-size: 1rem; } .card .mno { color: var(--teal); font-size: .72rem; letter-spacing: 2px; }
+  .card p { color: var(--muted); font-size: .82rem; line-height: 1.4; flex: 1; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { background: var(--teal-dim); color: var(--teal); font-size: .68rem; padding: 3px 8px; border-radius: 20px; }
+  .badge-earned { background: var(--gold); color: var(--navy-2); font-weight: 700; }
+  .card button, .btn {
+    background: var(--teal); color: var(--navy-2); border: 0; font-weight: 700;
+    padding: 10px; border-radius: 8px; cursor: pointer; font-size: .85rem;
+  }
+  .btn.ghost { background: transparent; color: var(--teal); border: 1px solid var(--teal); }
+  select, input {
+    background: var(--navy-3); color: var(--text); border: 1px solid #2a4a80;
+    border-radius: 8px; padding: 9px 10px; font-size: .85rem; width: 100%;
+  }
+  label { font-size: .72rem; color: var(--muted); letter-spacing: 1px; display: block; margin: 10px 0 4px; }
+  /* session */
+  #timerbar { height: 8px; background: var(--navy-3); border-radius: 4px; overflow: hidden; margin: 14px 0; }
+  #timerfill { height: 100%; background: var(--teal); width: 100%; transition: width .1s linear; }
+  .opt {
+    display: block; width: 100%; text-align: left; background: var(--navy-3); color: var(--text);
+    border: 1px solid #2a4a80; border-radius: 10px; padding: 13px 14px; margin: 8px 0;
+    cursor: pointer; font-size: .88rem; line-height: 1.35;
+  }
+  .opt:hover { border-color: var(--teal); }
+  .opt.right { border-color: var(--teal); background: var(--teal-dim); }
+  .opt.wrong { border-color: var(--red); background: #ff547022; }
+  .hint { color: var(--gold); font-size: .8rem; margin-top: 8px; }
+  .meta { color: var(--muted); font-size: .78rem; }
+  .crash {
+    position: fixed; inset: 0; background: #2b0a14ee; display: none; z-index: 50;
+    align-items: center; justify-content: center; flex-direction: column; gap: 14px; text-align: center; padding: 20px;
+  }
+  .crash h2 { color: var(--red); font-size: 2rem; letter-spacing: 3px; }
+  .result-box { background: var(--navy); border: 1px solid var(--navy-3); border-radius: 12px; padding: 24px; text-align: center; }
+  .result-box .big { font-size: 2.4rem; font-weight: 800; }
+  .pass { color: var(--teal); } .fail { color: var(--red); }
+  table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--navy-3); }
+  th { color: var(--muted); font-size: .7rem; letter-spacing: 1px; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 760px) { .two-col { grid-template-columns: 1fr; } }
+  .score-big { font-size: 3rem; font-weight: 800; color: var(--teal); }
+  .lvl-pick { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 18px; }
+  .lvl-pick button {
+    background: var(--navy-3); color: var(--text); border: 1px solid #2a4a80;
+    padding: 8px 13px; border-radius: 8px; cursor: pointer; font-size: .8rem;
+  }
+  .lvl-pick button.on { border-color: var(--teal); color: var(--teal); font-weight: 700; }
+  footer { text-align: center; color: var(--muted); font-size: .72rem; padding: 24px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>HEADSUP <span>OS</span> — ACADEMY SUITE <span style="font-size:.7rem;color:var(--muted)">DEMO v3.2.0</span></h1>
+  <div class="hud">
+    <span>XP <b id="hud-xp">0</b></span>
+    <span>Badges <b id="hud-badges">0</b>/7</span>
+    <span>Slump Index <b id="hud-slump" style="color:var(--red)">0</b></span>
+  </div>
+</header>
+<nav>
+  <button class="on" data-view="academy">Academy</button>
+  <button data-view="ledger">My Ledger</button>
+  <button data-view="aas">AAS Calculator</button>
+</nav>
+
+<main>
+  <!-- ══ ACADEMY: module grid ══ -->
+  <section id="view-academy">
+    <p class="meta" style="margin-bottom:6px">DIFFICULTY LEVEL</p>
+    <div class="lvl-pick" id="lvl-pick"></div>
+    <div class="grid" id="module-grid"></div>
+  </section>
+
+  <!-- ══ SESSION: live game loop ══ -->
+  <section id="view-session" style="display:none">
+    <div id="session-live">
+      <p class="mno" id="s-title" style="color:var(--teal);letter-spacing:2px;font-size:.75rem"></p>
+      <p class="meta" id="s-progress" style="margin:4px 0 2px"></p>
+      <div id="timerbar"><div id="timerfill"></div></div>
+      <h3 id="s-prompt" style="line-height:1.45;font-size:1.05rem"></h3>
+      <div id="s-opts"></div>
+      <p class="hint" id="s-hint"></p>
+    </div>
+    <div id="session-result" style="display:none" class="result-box"></div>
+  </section>
+
+  <!-- ══ LEDGER: prospect row + hexagon ══ -->
+  <section id="view-ledger" style="display:none">
+    <div class="two-col">
+      <div class="card">
+        <h3>Skill Hexagon</h3>
+        <svg id="hexagon" viewBox="0 0 300 300" style="width:100%;max-width:340px;margin:0 auto"></svg>
+      </div>
+      <div class="card">
+        <h3>Prospect Ledger Row</h3>
+        <table id="ledger-table"></table>
+        <h3 style="margin-top:14px">Credential Badges</h3>
+        <div class="tags" id="ledger-badges"></div>
+        <button class="btn ghost" style="margin-top:14px" onclick="resetAll()">Reset Demo Progress</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ AAS CALCULATOR ══ -->
+  <section id="view-aas" style="display:none">
+    <div class="two-col">
+      <div class="card">
+        <h3>Athletic Arbitrage Score — Input</h3>
+        <p class="meta">Missing fields are excluded and weights re-normalize (Zero Hallucination — nothing is imputed).</p>
+        <label>SPORT</label>
+        <select id="aas-sport">
+          <option value="football">Football</option>
+          <option value="baseball">Baseball</option>
+          <option value="basketball">Basketball</option>
+        </select>
+        <label>PUBLIC RANK (1 = best)</label><input id="aas-rank" type="number" placeholder="e.g. 12">
+        <label>RANKING POOL SIZE</label><input id="aas-pool" type="number" placeholder="e.g. 250">
+        <label>ACCOLADES (free text)</label><input id="aas-acc" type="text" placeholder="All-District, State Champion">
+        <label>HEIGHT (inches)</label><input id="aas-height" type="number" placeholder="e.g. 75">
+        <label>COGNITIVE / SPORT-IQ INPUT (0–100)</label><input id="aas-cog" type="number" placeholder="e.g. 88">
+        <button class="btn" style="margin-top:16px;width:100%" onclick="runAAS()">Compute AAS</button>
+      </div>
+      <div class="card" style="text-align:center;justify-content:center">
+        <p class="meta">ATHLETIC ARBITRAGE SCORE</p>
+        <div class="score-big" id="aas-out">—</div>
+        <p class="meta" id="aas-detail">Enter at least two verified components.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="crash" id="crash">
+  <h2>⚠ STATE CRASH</h2>
+  <p>Critical error at Hall of Fame difficulty.<br>Session progress wiped · <b style="color:var(--red)">slump_index +1</b> logged · module restart forced.</p>
+  <button class="btn" onclick="dismissCrash()">Restart Module</button>
+</div>
+
+<footer>HeadsUP MEDIA &amp; Scouting · Academy Suite demo · sample scenario content — no live athlete data</footer>
+
+<script>
+"use strict";
+/* ════════════════════════════════════════════════════════════════════
+   DIFFICULTY LADDER — mirrors DIFFICULTY_LEVELS in academy_engine.py
+   ════════════════════════════════════════════════════════════════════ */
+const LEVELS = {
+  rookie:       { label: "Rookie",       timer: Infinity, pass: 0.60, hints: true,  crash: false, xp: 1.0 },
+  pro:          { label: "Pro",          timer: 30,       pass: 0.70, hints: false, crash: false, xp: 1.5 },
+  all_star:     { label: "All-Star",     timer: 15,       pass: 0.80, hints: false, crash: false, xp: 2.0 },
+  superstar:    { label: "Superstar",    timer: 7,        pass: 0.90, hints: false, crash: false, xp: 3.0 },
+  hall_of_fame: { label: "Hall of Fame", timer: 3,        pass: 0.95, hints: false, crash: true,  xp: 5.0 },
+};
+
+/* ════════════════════════════════════════════════════════════════════
+   MODULE REGISTRY + SAMPLE SCENARIOS — mirrors ACADEMY_MODULES
+   q: prompt | o: options | a: correct idx | c: critical idx | h: hint
+   ════════════════════════════════════════════════════════════════════ */
+const MODULES = {
+  gm_front_office: { no: 1, title: "GM Front Office", axis: "Cap_Management", badge: "Capologist", xp: 400, icon: "🏟️",
+    desc: "Franchise-mode roster and salary-cap simulator with Transfer Portal Shock events.",
+    qs: [
+      { q: "TRANSFER PORTAL SHOCK: Your starting PG enters the portal 48 hours before the window closes. NIL budget left: $180K. Best move?",
+        o: ["Blow the full $180K to retain him at any cost", "Let him walk, promote the redshirt, bank $120K for spring adds", "Match a rival's offer you haven't verified"],
+        a: 1, c: 2, h: "Never bid against an unverified offer — that's negotiating against yourself." },
+      { q: "Your cap sheet shows 92% committed to 8 players. A 4-star wing wants a spot. What does sound cap management say?",
+        o: ["Sign him — stars always pay off", "Restructure two rotation deals into incentives first, then sign", "Cut your 3 lowest-rated players immediately"],
+        a: 1, c: null, h: "Create the space before you spend it." },
+      { q: "A booster offers to pay a recruit 'off-ledger' to save cap room. Your call?",
+        o: ["Take it — everyone does it", "Refuse: off-ledger money is a compliance detonation", "Take it but document it privately"],
+        a: 1, c: 0, h: "Off-book payments end programs. Hard no." },
+    ]},
+  pr_media_pod: { no: 2, title: "High-Stakes PR & Media", axis: "Media_Composure", badge: "Media_Proof", xp: 400, icon: "🎙️",
+    desc: "Interactive press-conference pod. Live metrics: Brand Liability, Locker Room Cohesion, Draft Stock Volatility.",
+    qs: [
+      { q: "PRESSER: 'Your teammate was benched after your comments leaked. Care to respond?' The clock is running.",
+        o: ["'That's between him and the coach.'", "'I said what I said.'", "'We handled it in the locker room as a team — it's behind us and we're locked in on Friday.'"],
+        a: 2, c: 1, h: "Own it, close it, redirect to the team." },
+      { q: "A viral clip takes your quote out of context. First move?",
+        o: ["Quote-tweet the poster and go at them", "Post the full unedited clip with a calm one-line caption", "Say nothing for a week"],
+        a: 1, c: 0, h: "Context beats combat. Receipts, not beef." },
+      { q: "A reporter asks about your NIL earnings mid-slump. Answer that protects Draft Stock?",
+        o: ["'My earnings are earned — check the film.'", "'I'm focused on winning; the business side stays with my team.'", "'Next question.'"],
+        a: 1, c: null, h: "Compartmentalize: game answers for game questions." },
+    ]},
+  nil_endorsement_matrix: { no: 3, title: "NIL Endorsement Matrix", axis: "Deal_Literacy", badge: "Deal_Hawk", xp: 450, icon: "📝",
+    desc: "Tycoon deal-maker: scan contract clauses and catch the traps before you sign.",
+    qs: [
+      { q: "CLAUSE SCAN: 'Brand shall retain rights to Athlete's name and likeness in perpetuity, in all media now known or hereafter devised.' Verdict?",
+        o: ["Standard boilerplate — sign it", "TRAP: hidden perpetuity rights — strike or walk", "Fine if the money is good"],
+        a: 1, c: 0, h: "'In perpetuity' = forever, even after the deal ends." },
+      { q: "CLAUSE SCAN: 'Athlete may not appear at any camp, circuit, or event not operated by Brand.' What is this?",
+        o: ["TRAP: exclusive circuit limit — kills your exposure market", "A normal exclusivity window", "A safety provision"],
+        a: 0, c: null, h: "Blanket event exclusivity chokes your visibility to scouts." },
+      { q: "CLAUSE SCAN: 'Brand may terminate at any time; Athlete may terminate only after 36 months, forfeiting all unpaid consideration.' Verdict?",
+        o: ["Mutual and fair", "TRAP: one-sided termination — renegotiate symmetry", "Standard for first deals"],
+        a: 1, c: 0, h: "Termination rights must cut both ways." },
+    ]},
+  athlete_venture_studio: { no: 4, title: "Athlete Venture Studio", axis: "Venture_Acumen", badge: "Founder_Mode", xp: 450, icon: "🚀",
+    desc: "Startup simulator: P&L, cash flow, and unit economics for apparel, facility, and tech plays.",
+    qs: [
+      { q: "Your apparel line: $22 unit cost, $35 wholesale price, 8% return rate, $6 shipping you eat. Healthy?",
+        o: ["Yes — $13 gross margin is plenty", "No — after shipping and returns the contribution margin is razor thin; reprice or cut COGS", "Only volume matters"],
+        a: 1, c: null, h: "Margin after ALL unit costs is the real number." },
+      { q: "CASH CRUNCH: 6 weeks of runway, a facility deal needs a $40K deposit, merch drop nets $25K in 3 weeks. Move?",
+        o: ["Wire the deposit now — lock the facility", "Delay the deposit, run the drop, negotiate a hold with partial payment", "Take a 40% APR merchant advance"],
+        a: 1, c: 2, h: "Never let one deal zero your runway." },
+      { q: "Your training app has 500 users, 3% paying. Investors ask about unit economics. Strongest answer?",
+        o: ["'We'll monetize later.'", "'CAC is $4, paid LTV is $71, payback in 5 weeks — here's the cohort table.'", "'Downloads are growing 40%.'"],
+        a: 1, c: null, h: "LTV : CAC with receipts beats vanity growth." },
+    ]},
+  executive_war_room: { no: 5, title: "Executive War Room", axis: "League_Strategy", badge: "War_Room_Cleared", xp: 500, icon: "♟️",
+    desc: "Turn-based negotiation: CBAs, luxury-tax caps, and broadcast/streaming rights.",
+    qs: [
+      { q: "CBA TABLE: Players want 51% of basketball-related income; owners open at 47% plus a harder tax line. Your first counter as the union?",
+        o: ["Accept 49% quickly to avoid a lockout", "Hold 51% but trade movement on the tax line for expanded revenue definitions", "Threaten decertification immediately"],
+        a: 1, c: 2, h: "Trade what's cheap to you for what's dear to them." },
+      { q: "A streamer bids $1.8B for exclusive rights; two linear networks offer $2.1B combined but split windows. League priority: reach + growth. Pick?",
+        o: ["Take the $2.1B split — cash is king", "Hybrid: sell windows separately and keep a direct-to-consumer slice", "Exclusive streamer — simplicity wins"],
+        a: 1, c: null, h: "Unbundling windows usually beats any single bid." },
+      { q: "Second-apron team wants your expiring contract plus picks for their disgruntled star. The tax math says?",
+        o: ["Do it — stars win titles", "Model the repeater-tax cascade first; the star may cost 3x his salary", "Refuse all tax-team trades"],
+        a: 1, c: null, h: "Luxury tax compounds — price the cascade, not the salary." },
+    ]},
+  career_draft_rpg: { no: 6, title: "Career Draft & Network RPG", axis: "Career_Vision", badge: "Drafted_Off_Court", xp: 400, icon: "🧭",
+    desc: "Non-playing career pathways RPG: analytics, front office, media, agency, coaching — plus the interview boss battle.",
+    qs: [
+      { q: "ENERGY ALLOCATION: 10 energy bars this semester. Analytics cert (4), team manager role (3), podcast (3), or all-in on one?",
+        o: ["All 10 on the podcast — build the brand", "Split 4/3/3 — stack credential + access + reps", "Save energy for next semester"],
+        a: 1, c: null, h: "Early career = diversified compounding, not one bet." },
+      { q: "BOSS BATTLE — GM interview: 'Why should a former player run our analytics intake?' Best weapon?",
+        o: ["'I played, so I get it.'", "'I speak both languages — here's a scouting-report-to-model pipeline I built on public data.'", "'I'll outwork everyone.'"],
+        a: 1, c: null, h: "Artifacts beat adjectives in a boss battle." },
+      { q: "An agency offers you an unpaid 'runner' role with vague duties. A front office offers a paid ops internship. Long-game pick?",
+        o: ["Agency — proximity to stars", "Front office — defined skills, real network, paid reps", "Neither; keep training"],
+        a: 1, c: 0, h: "Undefined unpaid 'runner' roles are how careers stall (or worse)." },
+    ]},
+  ip_shield: { no: 7, title: "The IP Shield", axis: "Deal_Literacy", badge: "IP_Shielded", xp: 450, icon: "🛡️",
+    desc: "Puzzle defense: deploy trademark, C&D, and image-rights counters to protect brand equity.",
+    qs: [
+      { q: "THREAT: A pop-up shop sells tees with your nickname and silhouette. You never registered anything. First counter?",
+        o: ["Post them on your story and shame them", "File trademark application on the nickname NOW, then C&D citing right of publicity", "Sue immediately in federal court"],
+        a: 1, c: 2, h: "Registration + C&D first; litigation is the expensive last resort." },
+      { q: "A game studio wants your likeness for a 'college legends' mode, offering flat $2,500 forever. Counter-strategy?",
+        o: ["Take it — exposure", "Counter with a term-limited license + royalty per unit + approval rights", "Decline all licensing"],
+        a: 1, c: 0, h: "Never sell likeness flat-and-forever; license it with a meter." },
+      { q: "Your old AAU program still uses your image on paid ads years later. Deploy?",
+        o: ["Image-rights clause demand: retroactive license fee or takedown in 14 days", "Let it ride — it's family", "Public callout thread"],
+        a: 0, c: null, h: "Sentiment and licensing are separate ledgers." },
+    ]},
+};
+
+/* ════════════════════════════════════════════════════════════════════
+   PERSISTENT STATE (localStorage) — the demo 'prospect ledger row'
+   ════════════════════════════════════════════════════════════════════ */
+const HEX_AXES = ["Cap_Management","Media_Composure","Deal_Literacy","Venture_Acumen","League_Strategy","Career_Vision"];
+const DEFAULT_STATE = { xp: 0, badges: [], graduated: [], slump: 0, hexagon: Object.fromEntries(HEX_AXES.map(a => [a, 0])) };
+let S = loadState();
+function loadState() {
+  try { const raw = localStorage.getItem("hu_academy_demo"); return raw ? JSON.parse(raw) : structuredClone(DEFAULT_STATE); }
+  catch { return structuredClone(DEFAULT_STATE); }
+}
+function saveState() { localStorage.setItem("hu_academy_demo", JSON.stringify(S)); refreshHUD(); }
+function resetAll() { S = structuredClone(DEFAULT_STATE); saveState(); renderModules(); renderLedger(); }
+function refreshHUD() {
+  document.getElementById("hud-xp").textContent = S.xp;
+  document.getElementById("hud-badges").textContent = S.badges.length;
+  document.getElementById("hud-slump").textContent = S.slump;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   VIEWS + MODULE GRID
+   ════════════════════════════════════════════════════════════════════ */
+let currentLevel = "rookie";
+document.querySelectorAll("nav button").forEach(b => b.onclick = () => showView(b.dataset.view, b));
+function showView(view, btn) {
+  stopTimer();
+  ["academy","session","ledger","aas"].forEach(v => document.getElementById("view-" + v).style.display = v === view ? "" : "none");
+  document.querySelectorAll("nav button").forEach(b => b.classList.toggle("on", b === btn));
+  if (view === "ledger") renderLedger();
+}
+function renderLevelPicker() {
+  const el = document.getElementById("lvl-pick");
+  el.innerHTML = "";
+  for (const [id, cfg] of Object.entries(LEVELS)) {
+    const b = document.createElement("button");
+    b.textContent = `${cfg.label} · ${cfg.timer === Infinity ? "∞" : cfg.timer + "s"} · ${Math.round(cfg.pass * 100)}%`;
+    b.classList.toggle("on", id === currentLevel);
+    b.onclick = () => { currentLevel = id; renderLevelPicker(); };
+    el.appendChild(b);
+  }
+}
+function renderModules() {
+  const grid = document.getElementById("module-grid");
+  grid.innerHTML = "";
+  for (const [id, m] of Object.entries(MODULES)) {
+    const done = S.badges.includes(m.badge);
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <span class="mno">MODULE ${m.no}</span>
+      <h3>${m.icon} ${m.title}</h3>
+      <p>${m.desc}</p>
+      <div class="tags">
+        <span class="tag${done ? " badge-earned" : ""}">${done ? "★ " : ""}${m.badge}</span>
+        <span class="tag">${m.xp} XP base</span>
+        <span class="tag">${m.axis.replace("_"," ")}</span>
+      </div>`;
+    const btn = document.createElement("button");
+    btn.textContent = done ? "Replay Module" : "Enter Module";
+    btn.onclick = () => startSession(id);
+    card.appendChild(btn);
+    grid.appendChild(card);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   GAME LOOP — session state machine (mirrors AcademyDifficultyEngine)
+   ════════════════════════════════════════════════════════════════════ */
+let sess = null, timerId = null, tLeft = 0;
+function startSession(moduleId) {
+  sess = { moduleId, level: currentLevel, i: 0, correct: 0, answered: false };
+  document.getElementById("session-live").style.display = "";
+  document.getElementById("session-result").style.display = "none";
+  showView("session", document.querySelector('nav button[data-view="academy"]'));
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("on"));
+  renderQuestion();
+}
+function renderQuestion() {
+  const m = MODULES[sess.moduleId], cfg = LEVELS[sess.level], q = m.qs[sess.i];
+  sess.answered = false;
+  document.getElementById("s-title").textContent = `MODULE ${m.no} — ${m.title.toUpperCase()} · ${cfg.label.toUpperCase()}`;
+  document.getElementById("s-progress").textContent = `Decision ${sess.i + 1} of ${m.qs.length} · pass threshold ${Math.round(cfg.pass * 100)}%`;
+  document.getElementById("s-prompt").textContent = q.q;
+  document.getElementById("s-hint").textContent = cfg.hints ? "💡 " + q.h : "";
+  const box = document.getElementById("s-opts");
+  box.innerHTML = "";
+  q.o.forEach((text, idx) => {
+    const b = document.createElement("button");
+    b.className = "opt"; b.textContent = text;
+    b.onclick = () => answer(idx, b);
+    box.appendChild(b);
+  });
+  startTimer(cfg.timer);
+}
+function startTimer(seconds) {
+  stopTimer();
+  const fill = document.getElementById("timerfill");
+  if (seconds === Infinity) { fill.style.width = "100%"; fill.style.background = "var(--teal)"; return; }
+  tLeft = seconds;
+  const total = seconds;
+  timerId = setInterval(() => {
+    tLeft -= 0.1;
+    fill.style.width = Math.max(0, tLeft / total * 100) + "%";
+    fill.style.background = tLeft < total * 0.3 ? "var(--red)" : "var(--teal)";
+    if (tLeft <= 0) { stopTimer(); timeout(); }
+  }, 100);
+}
+function stopTimer() { if (timerId) { clearInterval(timerId); timerId = null; } }
+function timeout() {
+  if (sess.answered) return;
+  sess.answered = true;
+  document.querySelectorAll(".opt").forEach(o => o.disabled = true);
+  document.getElementById("s-hint").textContent = "⏱ TIMEOUT — scored incorrect.";
+  setTimeout(nextQuestion, 900);
+}
+function answer(idx, btnEl) {
+  if (sess.answered) return;
+  sess.answered = true;
+  stopTimer();
+  const m = MODULES[sess.moduleId], cfg = LEVELS[sess.level], q = m.qs[sess.i];
+  const correct = idx === q.a;
+  const critical = q.c !== null && idx === q.c;
+  btnEl.classList.add(correct ? "right" : "wrong");
+  document.querySelectorAll(".opt")[q.a].classList.add("right");
+  if (correct) sess.correct += 1;
+  // Hall of Fame punishment tier — state crash on critical error
+  if (!correct && critical && cfg.crash) {
+    S.slump += 1; saveState();
+    document.getElementById("crash").style.display = "flex";
+    return;
+  }
+  setTimeout(nextQuestion, 1100);
+}
+function dismissCrash() {
+  document.getElementById("crash").style.display = "none";
+  sess = { ...sess, i: 0, correct: 0, answered: false };   // full progress wipe
+  renderQuestion();
+}
+function nextQuestion() {
+  const m = MODULES[sess.moduleId];
+  sess.i += 1;
+  if (sess.i < m.qs.length) { renderQuestion(); return; }
+  closeSession();
+}
+function closeSession() {
+  stopTimer();
+  const m = MODULES[sess.moduleId], cfg = LEVELS[sess.level];
+  const acc = sess.correct / m.qs.length;
+  const graduated = acc >= cfg.pass;
+  let rewardHtml = "";
+  if (graduated) {
+    const xp = Math.round(m.xp * cfg.xp);
+    S.xp += xp;
+    if (!S.badges.includes(m.badge)) S.badges.push(m.badge);
+    if (!S.graduated.includes(sess.moduleId)) S.graduated.push(sess.moduleId);
+    S.hexagon[m.axis] = Math.min(99, S.hexagon[m.axis] + 4 * cfg.xp);
+    saveState();
+    rewardHtml = `<p style="margin:10px 0"><span class="tag badge-earned">★ ${m.badge}</span></p>
+                  <p class="meta">+${xp} XP (${m.xp} base × ${cfg.xp} ${cfg.label} multiplier) · Hexagon ${m.axis.replace("_"," ")} +${4 * cfg.xp}</p>`;
+  }
+  document.getElementById("session-live").style.display = "none";
+  const box = document.getElementById("session-result");
+  box.style.display = "";
+  box.innerHTML = `
+    <p class="meta">MODULE ${m.no} — ${m.title.toUpperCase()} · ${cfg.label.toUpperCase()}</p>
+    <div class="big ${graduated ? "pass" : "fail"}">${graduated ? "GRADUATED" : "FAILED"}</div>
+    <p style="margin:6px 0">Accuracy ${(acc * 100).toFixed(0)}% — threshold ${Math.round(cfg.pass * 100)}%</p>
+    ${rewardHtml}
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:16px;flex-wrap:wrap">
+      <button class="btn" onclick="startSession('${sess.moduleId}')">${graduated ? "Replay" : "Retry Module"}</button>
+      <button class="btn ghost" onclick="showView('academy', document.querySelector('nav button[data-view=academy]'))">Back to Academy</button>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   LEDGER VIEW — hexagon radar + prospect row
+   ════════════════════════════════════════════════════════════════════ */
+function renderLedger() {
+  const rows = [
+    ["Player", "You (Demo Athlete)"],
+    ["Status", S.graduated.length === 7 ? "Academy Complete" : "In Development"],
+    ["Academy_XP", S.xp],
+    ["Modules_Graduated", `${S.graduated.length} / 7`],
+    ["slump_index", S.slump],
+    ["Verification_Needed", "false"],
+  ];
+  document.getElementById("ledger-table").innerHTML =
+    rows.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("");
+  document.getElementById("ledger-badges").innerHTML =
+    S.badges.length
+      ? S.badges.map(b => `<span class="tag badge-earned">★ ${b}</span>`).join("")
+      : `<span class="meta">No credentials earned yet — graduate a module.</span>`;
+  drawHexagon();
+}
+function drawHexagon() {
+  const svg = document.getElementById("hexagon");
+  const cx = 150, cy = 150, R = 105;
+  const pt = (axisIdx, r) => {
+    const ang = -Math.PI / 2 + axisIdx * Math.PI / 3;
+    return [cx + r * Math.cos(ang), cy + r * Math.sin(ang)];
+  };
+  let html = "";
+  for (const frac of [0.25, 0.5, 0.75, 1]) {
+    const pts = HEX_AXES.map((_, i) => pt(i, R * frac).join(",")).join(" ");
+    html += `<polygon points="${pts}" fill="none" stroke="#1a325c" stroke-width="1"/>`;
+  }
+  HEX_AXES.forEach((axis, i) => {
+    const [x, y] = pt(i, R);
+    const [lx, ly] = pt(i, R + 24);
+    html += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#1a325c"/>`;
+    html += `<text x="${lx}" y="${ly}" fill="#8fa4c4" font-size="9.5" text-anchor="middle">${axis.replace("_", " ")}</text>`;
+  });
+  const dataPts = HEX_AXES.map((a, i) => pt(i, R * Math.max(0.03, S.hexagon[a] / 99)).join(",")).join(" ");
+  html += `<polygon points="${dataPts}" fill="#00c89644" stroke="#00c896" stroke-width="2"/>`;
+  svg.innerHTML = html;
+}
+
+/* ════════════════════════════════════════════════════════════════════
+   AAS CALCULATOR — JS port of multi_sport_ledger.compute_aas()
+   Weights per sport over [ranking, accolade, physical, cognitive];
+   missing components excluded, surviving weights re-normalized.
+   ════════════════════════════════════════════════════════════════════ */
+const AAS_CONFIG = {
+  football:   { w: [0.25, 0.25, 0.25, 0.25], h: [66, 82] },
+  baseball:   { w: [0.25, 0.20, 0.20, 0.35], h: [66, 80] },
+  basketball: { w: [0.30, 0.20, 0.20, 0.30], h: [68, 86] },
+};
+const ACCOLADE_TIERS = [
+  [/all[- ]american|mcdonald'?s|under armour all[- ]america/i, 40],
+  [/gatorade (state )?player of the year|mr\.? (basketball|football|baseball)/i, 35],
+  [/all[- ]state/i, 25], [/state champ/i, 20],
+  [/district mvp|county mvp|conference mvp|mvp/i, 15],
+  [/all[- ]district|all[- ]county|all[- ]conference|all[- ]area/i, 10],
+  [/honorable mention/i, 5],
+];
+function runAAS() {
+  const cfg = AAS_CONFIG[document.getElementById("aas-sport").value];
+  const rank = parseFloat(document.getElementById("aas-rank").value);
+  const pool = parseFloat(document.getElementById("aas-pool").value);
+  const acc = document.getElementById("aas-acc").value.trim();
+  const height = parseFloat(document.getElementById("aas-height").value);
+  const cog = parseFloat(document.getElementById("aas-cog").value);
+
+  const ranking = (!isNaN(rank) && !isNaN(pool) && rank >= 1 && pool >= rank)
+    ? (1 - (rank - 1) / pool) * 100 : NaN;
+  const accolade = acc ? Math.min(100, ACCOLADE_TIERS.reduce((s, [re, w]) => s + (re.test(acc) ? w : 0), 0)) : NaN;
+  const [floor, ceil] = cfg.h;
+  const physical = !isNaN(height)
+    ? (Math.min(ceil, Math.max(floor, height)) - floor) / (ceil - floor) * 100 : NaN;
+  const cognitive = (!isNaN(cog) && cog >= 0 && cog <= 100) ? cog : NaN;
+
+  const vec = [ranking, accolade, physical, cognitive];
+  const names = ["Ranking", "Accolades", "Physical", "Cognitive"];
+  const live = vec.map((v, i) => [v, cfg.w[i], names[i]]).filter(([v]) => !isNaN(v));
+  const out = document.getElementById("aas-out"), detail = document.getElementById("aas-detail");
+  if (live.length < 2) {
+    out.textContent = "—"; out.style.color = "var(--red)";
+    detail.textContent = "Verification_Needed = TRUE — fewer than 2 verified components. Nothing is imputed.";
+    return;
+  }
+  const wSum = live.reduce((s, [, w]) => s + w, 0);
+  const aas = live.reduce((s, [v, w]) => s + v * (w / wSum), 0);
+  out.textContent = aas.toFixed(2); out.style.color = "var(--teal)";
+  detail.innerHTML = live.map(([v, w, n]) =>
+    `${n}: ${v.toFixed(1)} × ${(w / wSum).toFixed(2)}`).join(" · ")
+    + `<br>${4 - live.length ? (4 - live.length) + " missing component(s) excluded, weights re-normalized." : "All 4 components verified."}`;
+}
+
+/* ── boot ── */
+renderLevelPicker(); renderModules(); refreshHUD();
+</script>
+</body>
+</html>

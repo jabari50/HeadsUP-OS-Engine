@@ -31,3 +31,22 @@ Thumbs.db
 
 # Render
 .render-buildpacks.json
+
+# Node / Next.js
+node_modules/
+.next/
+*.tsbuildinfo
+
+# Deploy platform state
+.vercel/
+.netlify/
+
+# Claude Code local state (worktree clones contain stale secret copies)
+.claude/worktrees/
+
+# Local databases — live athlete data, never commit
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3

@@ -4,12 +4,8 @@ import { createHash } from "crypto";
 import { createClient } from "@supabase/supabase-js";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import {
-  calculateOvr,
-  TECHNICAL_FIELDS,
-  NEURAL_FIELDS,
-  POSITIONS,
-} from "@/lib/vgm/ovr";
+import { TECHNICAL_FIELDS, NEURAL_FIELDS, POSITIONS } from "@/lib/vgm/ovr";
+import { scoreIntake, EngineUnavailable } from "@/lib/vgm/engine";
 import { verifyTurnstile } from "@/lib/turnstile";
 
 export type IntakeState = { ok: boolean; message: string } | null;
@@ -71,13 +67,41 @@ export async function submitIntake(
   const neural = NEURAL_FIELDS.map(([k]) => rating(formData, `n_${k}`));
   const physical = rating(formData, "physical");
 
-  const { ovr, tier } = calculateOvr(technical, neural, physical);
+  // Source of truth: score via the HeadsUp OS Python engine (ovr_engine.py).
+  // Fail closed — never fabricate a score if the engine is unavailable (ZHR).
+  let ovr: number;
+  let tier: string;
+  let breakdown: Record<string, number> | null = null;
+  try {
+    const scored = await scoreIntake({
+      name: fullName,
+      position,
+      school,
+      classYear: String(gradYear),
+      classification: "HS",
+      technical10: technical,
+      neural10: neural,
+      physical10: physical,
+    });
+    ovr = scored.ovr;
+    tier = scored.tier;
+    breakdown = scored.ovr_breakdown;
+  } catch (e) {
+    if (e instanceof EngineUnavailable) {
+      return err(
+        "Scoring is temporarily unavailable. Please try again in a few minutes."
+      );
+    }
+    return err("Could not submit your profile. Please try again.");
+  }
 
   const assessment = {
     email,
     height: height || null,
     self_reported: true,
     submitted_at: new Date().toISOString(),
+    scored_by: "hu-os-engine/ovr_engine.py",
+    ovr_breakdown: breakdown,
     technical: Object.fromEntries(
       TECHNICAL_FIELDS.map(([k], i) => [k, technical[i]])
     ),

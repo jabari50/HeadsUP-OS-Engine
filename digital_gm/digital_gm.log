@@ -1,0 +1,6 @@
+2026-05-27 21:51:15 | INFO | main | The Digital GM v1.0.0 initializing...
+2026-05-27 21:51:16 | INFO | auth | No valid cache — attempting live license validation.
+2026-05-27 21:51:16 | INFO | auth | Validating PRO-File OS license against https://api.profilios.com/v1/auth/validate
+2026-05-27 21:51:16 | ERROR | auth | PRO-File OS API unreachable — connection failed.
+2026-05-27 21:51:16 | WARNING | auth | PRO-File OS license validation failed: {'valid': False, 'reason': 'connection_failed'}
+2026-05-27 21:51:16 | ERROR | main | Authentication failed. Application cannot proceed.

@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+@layer base {
+  :root {
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-display: 'Oswald', Impact, sans-serif;
+  }
+  body {
+    @apply bg-dark-bg text-cream;
+    font-family: var(--font-sans);
+  }
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+  /* Print styles for RIB PDF export */
+  @media print {
+    .no-print { display: none !important; }
+    body { background: white !important; color: black !important; }
+    .print-section { break-inside: avoid; page-break-inside: avoid; }
+  }
+}

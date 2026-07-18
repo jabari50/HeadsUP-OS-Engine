@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>The Digital GM v1.0.0</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg-deep:#0d0f14;--bg-panel:#13161e;--bg-card:#1a1e2a;--bg-hover:#1f2435;--bg-input:#0f1219;
+  --border:#252b3b;--border-lit:#2e3650;
+  --accent:#4f7cff;--accent-dim:#1e2d5e;--accent-glow:#4f7cff22;
+  --gold:#f5c842;--gold-dim:#3d2f08;
+  --green:#3ecf8e;--green-dim:#0a2e1c;
+  --red:#f55353;--red-dim:#2e0a0a;
+  --orange:#f5a742;--orange-dim:#2e1e08;
+  --purple:#c084fc;--purple-dim:#2a1040;
+  --text-1:#e8ecf4;--text-2:#8b95b0;--text-3:#4a5270;
+  --sidebar-w:220px;--topbar-h:52px;--statusbar-h:26px;
+  --font:'Inter','Segoe UI',system-ui,sans-serif;
+  --radius:8px;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg-deep);color:var(--text-1);font-family:var(--font);font-size:13px}
+button{font-family:var(--font);cursor:pointer;border:none;outline:none}
+input,select,textarea{font-family:var(--font);outline:none}
+
+/* ── TOPBAR ── */
+.topbar{height:var(--topbar-h);background:var(--bg-panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 18px;gap:12px;flex-shrink:0;z-index:200;position:relative}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:30px;height:30px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;letter-spacing:-1px;flex-shrink:0}
+.logo-text{display:flex;flex-direction:column;line-height:1}
+.logo-name{font-size:13px;font-weight:700}
+.logo-sub{font-size:9px;color:var(--text-3);letter-spacing:.8px;text-transform:uppercase;margin-top:1px}
+.license-pill{display:flex;align-items:center;gap:5px;background:var(--green-dim);border:1px solid #1a4a2c;border-radius:20px;padding:3px 10px;font-size:10px;font-weight:700;color:var(--green)}
+.lic-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green)}
+.tb-spacer{flex:1}
+.tb-btn{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:var(--text-2);padding:5px 12px;font-size:11px;font-weight:500;display:inline-flex;align-items:center;gap:5px;transition:.12s}
+.tb-btn:hover{border-color:var(--accent);color:var(--text-1)}
+.tb-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+.tb-btn.primary:hover{background:#3d6de8}
+.tb-divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.op-chip{display:flex;align-items:center;gap:7px;background:var(--bg-card);border:1px solid var(--border);border-radius:20px;padding:3px 10px 3px 4px}
+.op-av{width:24px;height:24px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--accent)}
+.op-name{font-size:11px;font-weight:600}
+
+/* ── LAYOUT ── */
+.app{display:flex;height:calc(100vh - var(--topbar-h) - var(--statusbar-h));overflow:hidden}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar-w);background:var(--bg-panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;padding:10px 0;flex-shrink:0}
+.nav-group{padding:0 10px;margin-bottom:2px}
+.nav-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text-3);padding:8px 8px 3px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;color:var(--text-2);font-size:12px;font-weight:500;transition:.1s;margin-bottom:1px;border:1px solid transparent;user-select:none}
+.nav-item:hover{background:var(--bg-hover);color:var(--text-1)}
+.nav-item.active{background:var(--accent-glow);color:var(--accent);border-color:var(--accent-dim)}
+.nav-ic{width:16px;text-align:center;font-size:13px;flex-shrink:0}
+.nav-badge{margin-left:auto;border-radius:10px;font-size:9px;font-weight:800;padding:1px 6px;min-width:17px;text-align:center}
+.nb-blue{background:var(--accent-dim);color:var(--accent)}
+.nb-orange{background:var(--orange-dim);color:var(--orange)}
+.nb-red{background:var(--red-dim);color:var(--red)}
+.sb-foot{margin-top:auto;padding:10px;border-top:1px solid var(--border)}
+.sync-chip{display:flex;align-items:center;gap:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:8px 10px}
+.sync-pulse{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.sync-info{display:flex;flex-direction:column}
+.sync-lbl{font-size:11px;font-weight:600;color:var(--text-1)}
+.sync-sub{font-size:9px;color:var(--text-3)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.page.active{display:flex}
+.ph{padding:18px 22px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.ph-left{display:flex;flex-direction:column;gap:1px}
+.ph-title{font-size:18px;font-weight:800;color:var(--text-1)}
+.ph-sub{font-size:11px;color:var(--text-3)}
+.ph-right{display:flex;gap:8px;align-items:center}
+.content{flex:1;overflow-y:auto;padding:14px 22px;display:flex;flex-direction:column;gap:14px}
+
+/* ── STATUS BAR ── */
+.statusbar{height:var(--statusbar-h);background:var(--bg-panel);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:18px;flex-shrink:0}
+.sb-item{display:flex;align-items:center;gap:5px;font-size:9px;color:var(--text-3);letter-spacing:.3px}
+.sb-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--green)}
+.dot-orange{background:var(--orange)}
+.dot-blue{background:var(--accent)}
+.sb-right{margin-left:auto;font-size:9px;color:var(--text-3)}
+
+/* ── CARDS / PANELS ── */
+.stat-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.stat-card{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:13px 15px;display:flex;flex-direction:column;gap:5px;transition:border-color .15s}
+.stat-card:hover{border-color:var(--border-lit)}
+.sc-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);font-weight:700}
+.sc-val{font-size:24px;font-weight:900;line-height:1}
+.sc-delta{font-size:10px;color:var(--text-3)}
+.sc-accent{border-color:var(--accent-dim);background:linear-gradient(135deg,#1a1e2a,#1a2040)}
+.cv-accent{color:var(--accent)}
+.cv-green{color:var(--green)}
+.cv-orange{color:var(--orange)}
+.cv-red{color:var(--red)}
+.delta-up{color:var(--green)}
+.delta-warn{color:var(--orange)}
+
+.panel{background:var(--bg-card);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.panel-hd{display:flex;align-items:center;justify-content:space-between;padding:11px 15px;border-bottom:1px solid var(--border);flex-shrink:0}
+.panel-title{font-size:12px;font-weight:700;display:flex;align-items:center;gap:7px}
+.panel-title .ic{color:var(--accent)}
+.panel-action{font-size:10px;color:var(--accent);font-weight:600;padding:2px 8px;border:1px solid var(--accent-dim);border-radius:5px;background:var(--accent-glow);cursor:pointer}
+.panel-action:hover{background:var(--accent-dim)}
+
+/* ── PIPELINE STRIP ── */
+.pipe-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.pipe-step{background:var(--bg-card);padding:11px 15px;display:flex;flex-direction:column;gap:3px}
+.pipe-step.done{background:#0a1e10}
+.pipe-step.active{background:#0a1228}
+.pipe-lbl{font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);font-weight:700}
+.pipe-val{font-size:17px;font-weight:900}
+.pipe-step.done .pipe-val{color:var(--green)}
+.pipe-step.active .pipe-val{color:var(--accent)}
+.pipe-sub{font-size:9px;color:var(--text-3)}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse}
+thead tr{border-bottom:1px solid var(--border)}
+th{text-align:left;padding:7px 14px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-3);white-space:nowrap}
+tbody tr{border-bottom:1px solid var(--border);transition:background .1s;cursor:pointer}
+tbody tr:hover{background:var(--bg-hover)}
+tbody tr:last-child{border-bottom:none}
+td{padding:9px 14px;font-size:11px;color:var(--text-2);white-space:nowrap}
+td.td-name{color:var(--text-1);font-weight:600;font-size:12px}
+
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:800;letter-spacing:.3px}
+.b-pos{background:var(--accent-dim);color:var(--accent)}
+.b-active{background:var(--green-dim);color:var(--green)}
+.b-committed{background:var(--accent-dim);color:var(--accent)}
+.b-signed{background:var(--gold-dim);color:var(--gold)}
+.b-transfer{background:var(--purple-dim);color:var(--purple)}
+.b-pro{background:#2a1a00;color:#ff9900}
+.b-synced{background:var(--green-dim);color:var(--green)}
+.b-pending{background:var(--orange-dim);color:var(--orange)}
+.b-rejected{background:var(--red-dim);color:var(--red)}
+.b-manual{background:#1a1a2a;color:var(--text-2)}
+.b-csv{background:#0a1e2a;color:#60c8ff}
+.b-flagged{background:var(--orange-dim);color:var(--orange)}
+
+.flag-icon{color:var(--orange);font-size:11px}
+
+/* ── SEARCH BAR ── */
+.search-bar{display:flex;align-items:center;gap:8px;background:var(--bg-input);border:1px solid var(--border);border-radius:7px;padding:5px 10px;flex:1;max-width:280px}
+.search-bar input{background:none;border:none;color:var(--text-1);font-size:12px;width:100%}
+.search-bar input::placeholder{color:var(--text-3)}
+.search-ic{color:var(--text-3);font-size:12px}
+
+/* ── FORM ELEMENTS ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-grid.three{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--text-3)}
+.field input,.field select{background:var(--bg-input);border:1px solid var(--border);border-radius:7px;color:var(--text-1);padding:8px 11px;font-size:12px;transition:.15s;width:100%}
+.field input:focus,.field select:focus{border-color:var(--accent);background:#0f1628}
+.field input.err,.field select.err{border-color:var(--red)}
+.field .err-msg{font-size:10px;color:var(--red);display:none}
+.field.has-err .err-msg{display:block}
+.field.has-err input,.field.has-err select{border-color:var(--red)}
+.field input::placeholder{color:var(--text-3)}
+select option{background:var(--bg-card)}
+.field.required label::after{content:" *";color:var(--accent)}
+
+/* ── FLAG LIST ── */
+.flag-list{overflow-y:auto}
+.flag-item{display:flex;flex-direction:column;gap:3px;padding:9px 15px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.flag-item:hover{background:var(--bg-hover)}
+.flag-item:last-child{border-bottom:none}
+.fi-name{font-size:12px;font-weight:600;color:var(--text-1)}
+.fi-reason{font-size:10px;color:var(--orange)}
+.fi-meta{font-size:9px;color:var(--text-3)}
+
+/* ── SYNC QUEUE ── */
+.sq-item{display:flex;align-items:center;gap:10px;padding:8px 15px;border-bottom:1px solid var(--border)}
+.sq-item:last-child{border-bottom:none}
+.sq-av{width:26px;height:26px;border-radius:50%;background:var(--accent-dim);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--accent);flex-shrink:0}
+.sq-info{flex:1}
+.sq-name{font-size:11px;font-weight:600;color:var(--text-1)}
+.sq-sub{font-size:9px;color:var(--text-3)}
+.sq-actions{display:flex;gap:5px}
+.sq-btn{font-size:9px;font-weight:700;padding:2px 8px;border-radius:4px;cursor:pointer;transition:.1s}
+.sq-btn.push{background:var(--accent-dim);color:var(--accent);border:1px solid var(--accent-dim)}
+.sq-btn.push:hover{background:var(--accent);color:#fff}
+.sq-btn.skip{background:transparent;color:var(--text-3);border:1px solid var(--border)}
+.sq-btn.skip:hover{color:var(--red);border-color:var(--red)}
+
+/* ── INGEST STRIP ── */
+.ingest-strip{background:linear-gradient(90deg,#0e1530,#0d1224);border:1px solid var(--accent-dim);border-radius:10px;padding:13px 18px;display:flex;align-items:center;gap:14px}
+.is-icon{font-size:20px}
+.is-text{flex:1}
+.is-title{font-size:12px;font-weight:700}
+.is-sub{font-size:10px;color:var(--text-3);margin-top:2px}
+.is-actions{display:flex;gap:8px}
+
+/* ── DROP ZONE ── */
+.drop-zone{border:2px dashed var(--border);border-radius:10px;padding:30px;text-align:center;cursor:pointer;transition:.15s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.drop-zone:hover,.drop-zone.over{border-color:var(--accent);background:var(--accent-glow)}
+.drop-icon{font-size:28px}
+.drop-title{font-size:13px;font-weight:600}
+.drop-sub{font-size:11px;color:var(--text-3)}
+#csv-file-input{display:none}
+
+/* ── TWO COL ── */
+.two-col{display:grid;grid-template-columns:1fr 320px;gap:14px}
+
+/* ── MODAL ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:#000a;z-index:500;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--bg-panel);border:1px solid var(--border-lit);border-radius:12px;width:560px;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-hd{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.modal-title{font-size:15px;font-weight:700}
+.modal-close{width:26px;height:26px;border-radius:50%;background:var(--bg-card);border:1px solid var(--border);color:var(--text-2);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.12s}
+.modal-close:hover{background:var(--red-dim);color:var(--red);border-color:var(--red)}
+.modal-body{overflow-y:auto;padding:20px}
+.modal-foot{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;flex-shrink:0}
+
+/* ── TOAST ── */
+.toast-stack{position:fixed;bottom:36px;right:18px;display:flex;flex-direction:column;gap:8px;z-index:1000;pointer-events:none}
+.toast{background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:11px;display:flex;align-items:center;gap:8px;min-width:240px;opacity:0;transform:translateX(20px);transition:.25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(0)}
+.toast.success{border-color:#1d4a2c;background:#0a1e12}
+.toast.warn{border-color:var(--orange-dim);background:#1a1000}
+.toast.error{border-color:var(--red-dim);background:#1a0000}
+.toast-ic{font-size:14px}
+
+/* ── EMPTY STATE ── */
+.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px;gap:10px;color:var(--text-3)}
+.empty-icon{font-size:32px;opacity:.4}
+.empty-title{font-size:13px;font-weight:600;color:var(--text-2)}
+.empty-sub{font-size:11px}
+
+/* ── SECTION DIVIDER ── */
+.section-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--text-3);padding-bottom:6px;border-bottom:1px solid var(--border);margin-bottom:2px}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap{height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-bar{height:100%;background:var(--accent);border-radius:2px;transition:width .4s}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-lit);border-radius:4px}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="logo">
+    <div class="logo-icon">GM</div>
+    <div class="logo-text">
+      <div class="logo-name">The Digital GM</div>
+      <div class="logo-sub">v1.0.0 · PRO-File OS</div>
+    </div>
+  </div>
+  <div class="tb-divider"></div>
+  <div class="license-pill"><div class="lic-dot"></div>LICENSED · ELITE TIER</div>
+  <div class="tb-spacer"></div>
+  <button class="tb-btn" onclick="triggerSync()">⟳ Sync to OS</button>
+  <button class="tb-btn" onclick="openAddPlayer()">⊕ Add Player</button>
+  <button class="tb-btn primary" onclick="nav('ingestion')">▲ Upload CSV</button>
+  <div class="tb-divider"></div>
+  <div class="op-chip"><div class="op-av">JJ</div><span class="op-name">J. Johnson</span></div>
+</header>
+
+<!-- APP -->
+<div class="app">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="nav-group">
+    <div class="nav-lbl">Command</div>
+    <div class="nav-item active" id="nav-dashboard" onclick="nav('dashboard')"><span class="nav-ic">⬛</span>Dashboard</div>
+    <div class="nav-item" id="nav-roster" onclick="nav('roster')"><span class="nav-ic">👥</span>Roster<span class="nav-badge nb-blue" id="nb-roster">0</span></div>
+    <div class="nav-item" id="nav-ingestion" onclick="nav('ingestion')"><span class="nav-ic">⬆</span>Ingestion<span class="nav-badge nb-orange" id="nb-ingest" style="display:none"></span></div>
+    <div class="nav-item" id="nav-sync" onclick="nav('sync')"><span class="nav-ic">⟳</span>Sync Panel<span class="nav-badge nb-blue" id="nb-sync">0</span></div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">Program Ops</div>
+    <div class="nav-item" onclick="comingSoon('Schedule')"><span class="nav-ic">📅</span>Schedule</div>
+    <div class="nav-item" onclick="comingSoon('Travel')"><span class="nav-ic">✈</span>Travel</div>
+    <div class="nav-item" onclick="comingSoon('Communications')"><span class="nav-ic">📣</span>Communications</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">Development</div>
+    <div class="nav-item" onclick="comingSoon('Practice')"><span class="nav-ic">🏀</span>Practice</div>
+    <div class="nav-item" onclick="comingSoon('Stats')"><span class="nav-ic">📊</span>Stats<span class="nav-badge nb-red">!</span></div>
+    <div class="nav-item" onclick="comingSoon('Academics')"><span class="nav-ic">🎓</span>Academics</div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-lbl">Admin</div>
+    <div class="nav-item" onclick="comingSoon('Compliance')"><span class="nav-ic">🛡</span>Compliance</div>
+    <div class="nav-item" onclick="comingSoon('Settings')"><span class="nav-ic">⚙</span>Settings</div>
+  </div>
+  <div class="sb-foot">
+    <div class="sync-chip">
+      <div class="sync-pulse"></div>
+      <div class="sync-info">
+        <div class="sync-lbl" id="sb-sync-lbl">0 Pending Sync</div>
+        <div class="sync-sub" id="sb-sync-sub">Last sync: never</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══ DASHBOARD ═══ -->
+<div class="page active" id="page-dashboard">
+  <div class="ph">
+    <div class="ph-left">
+      <div class="ph-title">Program Dashboard</div>
+      <div class="ph-sub" id="dash-sub">Team Loaded DFW · 2025–26 Season · 17U</div>
+    </div>
+    <div class="ph-right">
+      <button class="tb-btn" onclick="openAddPlayer()">⊕ Add Player</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="stat-row">
+      <div class="stat-card sc-accent"><div class="sc-lbl">Total Roster</div><div class="sc-val cv-accent" id="stat-total">0</div><div class="sc-delta" id="stat-total-d">No players yet</div></div>
+      <div class="stat-card"><div class="sc-lbl">Synced to OS</div><div class="sc-val cv-green" id="stat-synced">0</div><div class="sc-delta" id="stat-synced-d">of 0 players</div></div>
+      <div class="stat-card"><div class="sc-lbl">Pending Sync</div><div class="sc-val cv-orange" id="stat-pending">0</div><div class="sc-delta delta-warn" id="stat-pending-d">awaiting push</div></div>
+      <div class="stat-card"><div class="sc-lbl">Flagged Records</div><div class="sc-val cv-orange" id="stat-flagged">0</div><div class="sc-delta delta-warn">need verification</div></div>
+      <div class="stat-card"><div class="sc-lbl">Committed</div><div class="sc-val cv-green" id="stat-committed">0</div><div class="sc-delta delta-up">↑ this season</div></div>
+    </div>
+    <div class="pipe-row">
+      <div class="pipe-step done"><div class="pipe-lbl">① DB Initialized</div><div class="pipe-val">✓</div><div class="pipe-sub">digital_gm.db · local</div></div>
+      <div class="pipe-step done"><div class="pipe-lbl">② OS License</div><div class="pipe-val">✓</div><div class="pipe-sub">Elite · 6 days left</div></div>
+      <div class="pipe-step active"><div class="pipe-lbl">③ Sync Queue</div><div class="pipe-val" id="pipe-sync-val">0</div><div class="pipe-sub">pending push to OS</div></div>
+      <div class="pipe-step"><div class="pipe-lbl">④ Matchmaking</div><div class="pipe-val" style="font-size:12px;color:var(--text-3)">Phase 2</div><div class="pipe-sub">api/client.py</div></div>
+    </div>
+    <div class="two-col">
+      <div class="panel">
+        <div class="panel-hd">
+          <div class="panel-title"><span class="ic">👥</span>Active Roster</div>
+          <div class="panel-action" onclick="nav('roster')">View All →</div>
+        </div>
+        <div class="tbl-wrap">
+          <table id="dash-roster-table">
+            <thead><tr><th>Player</th><th>Pos</th><th>Ht</th><th>Grad</th><th>Eligibility</th><th>Sync</th><th></th></tr></thead>
+            <tbody id="dash-roster-body"></tbody>
+          </table>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="panel" style="flex:1">
+          <div class="panel-hd">
+            <div class="panel-title"><span style="color:var(--orange)">⚠</span> Verification Queue</div>
+            <div class="panel-action" onclick="nav('roster')">Review All</div>
+          </div>
+          <div class="flag-list" id="dash-flag-list" style="max-height:200px;overflow-y:auto"></div>
+        </div>
+        <div class="panel">
+          <div class="panel-hd">
+            <div class="panel-title"><span class="ic">⟳</span>Pending OS Sync</div>
+            <button class="tb-btn primary" style="font-size:10px;padding:3px 10px" onclick="triggerSync()">Push Now</button>
+          </div>
+          <div id="dash-sync-list" style="max-height:160px;overflow-y:auto"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ingest-strip">
+      <div class="is-icon">⬆</div>
+      <div class="is-text">
+        <div class="is-title">CSV Batch Ingestion Ready</div>
+        <div class="is-sub">Drop a roster CSV or Google Form export — sanitizer flags missing fields automatically. No data is guessed or filled.</div>
+      </div>
+      <div class="is-actions">
+        <button class="tb-btn" onclick="openAddPlayer()">Manual Entry</button>
+        <button class="tb-btn primary" onclick="nav('ingestion')">▲ Upload CSV</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ROSTER ═══ -->
+<div class="page" id="page-roster">
+  <div class="ph">
+    <div class="ph-left">
+      <div class="ph-title">Roster</div>
+      <div class="ph-sub" id="roster-sub">0 players · 0 flagged</div>
+    </div>
+    <div class="ph-right">
+      <div class="search-bar"><span class="search-ic">🔍</span><input type="text" id="roster-search" placeholder="Search players..." oninput="renderRosterTable()"/></div>
+      <select id="roster-filter-elig" onchange="renderRosterTable()" style="background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:var(--text-2);padding:5px 10px;font-size:11px">
+        <option value="">All Eligibility</option>
+        <option>Active</option><option>Committed</option><option>Signed</option><option>Transfer</option><option>Pro</option>
+      </select>
+      <select id="roster-filter-sync" onchange="renderRosterTable()" style="background:var(--bg-card);border:1px solid var(--border);border-radius:6px;color:var(--text-2);padding:5px 10px;font-size:11px">
+        <option value="">All Sync</option>
+        <option value="pending">Pending</option><option value="synced">Synced</option><option value="rejected_by_master">Rejected</option>
+      </select>
+      <button class="tb-btn primary" onclick="openAddPlayer()">⊕ Add Player</button>
+    </div>
+  </div>
+  <div class="content" style="padding-top:12px">
+    <div class="panel" style="flex:1">
+      <div class="tbl-wrap" style="flex:1">
+        <table>
+          <thead><tr>
+            <th>Player</th><th>Pos</th><th>Ht</th><th>Wt</th><th>Grad</th>
+            <th>School</th><th>Eligibility</th><th>Source</th><th>Sync</th><th>Flags</th>
+          </tr></thead>
+          <tbody id="roster-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INGESTION ═══ -->
+<div class="page" id="page-ingestion">
+  <div class="ph">
+    <div class="ph-left">
+      <div class="ph-title">Ingestion</div>
+      <div class="ph-sub">Import roster data — all records sanitized and flagged before entering the DB</div>
+    </div>
+  </div>
+  <div class="content">
+    <div class="two-col" style="grid-template-columns:1fr 1fr">
+      <!-- CSV IMPORT -->
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><span class="ic">📄</span>CSV Batch Import</div></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div class="drop-zone" id="drop-zone" onclick="document.getElementById('csv-file-input').click()" ondragover="dzOver(event)" ondragleave="dzLeave(event)" ondrop="dzDrop(event)">
+            <div class="drop-icon">📂</div>
+            <div class="drop-title">Drop CSV here or click to browse</div>
+            <div class="drop-sub">Accepts .csv — roster exports, Google Form responses</div>
+          </div>
+          <input type="file" id="csv-file-input" accept=".csv" onchange="handleCSVFile(event)"/>
+          <div id="csv-preview" style="display:none">
+            <div class="section-label" style="margin-bottom:8px">Preview — <span id="csv-count"></span></div>
+            <div class="tbl-wrap" style="max-height:180px;overflow-y:auto;border:1px solid var(--border);border-radius:7px">
+              <table><thead><tr id="csv-thead"></tr></thead><tbody id="csv-tbody"></tbody></table>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:10px">
+              <button class="tb-btn primary" style="flex:1" onclick="importCSV()">▲ Import All Records</button>
+              <button class="tb-btn" onclick="cancelCSV()">Cancel</button>
+            </div>
+          </div>
+          <div style="background:var(--bg-input);border:1px solid var(--border);border-radius:7px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px">Expected CSV Columns</div>
+            <div style="display:flex;flex-wrap:wrap;gap:4px" id="schema-cols"></div>
+          </div>
+        </div>
+      </div>
+      <!-- DEMO CSV GENERATOR -->
+      <div class="panel">
+        <div class="panel-hd"><div class="panel-title"><span class="ic">🧪</span>Load Demo Roster</div></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:11px;color:var(--text-2);line-height:1.6">Load a sample 12-player roster to see the full sanitizer pipeline in action. Includes clean records and intentionally flagged records (missing height, invalid position, blank school).</div>
+          <div id="demo-breakdown" style="display:flex;flex-direction:column;gap:6px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text-2)">Total records</span><span style="color:var(--text-1);font-weight:700">12</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--text-2)">Clean records</span><span style="color:var(--green);font-weight:700">8</span></div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 0"><span style="color:var(--text-2)">Flagged records</span><span style="color:var(--orange);font-weight:700">4</span></div>
+          </div>
+          <button class="tb-btn primary" style="width:100%" onclick="loadDemoRoster()">⚡ Load Demo Roster</button>
+          <button class="tb-btn" style="width:100%" onclick="clearAllPlayers()">🗑 Clear All Players</button>
+        </div>
+      </div>
+    </div>
+    <!-- INGESTION LOG -->
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><span class="ic">📋</span>Ingestion Log</div><div class="panel-action" onclick="clearLog()">Clear</div></div>
+      <div id="ingest-log" style="font-family:monospace;font-size:10px;color:var(--text-2);padding:10px 14px;max-height:180px;overflow-y:auto;background:var(--bg-deep)">
+        <div style="color:var(--text-3)">-- No ingestion activity yet --</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SYNC PANEL ═══ -->
+<div class="page" id="page-sync">
+  <div class="ph">
+    <div class="ph-left">
+      <div class="ph-title">Sync Panel</div>
+      <div class="ph-sub">Push pending records to PRO-File OS master database</div>
+    </div>
+    <div class="ph-right">
+      <button class="tb-btn primary" onclick="triggerSync()">⟳ Push All Pending</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+      <div class="stat-card"><div class="sc-lbl">Pending Push</div><div class="sc-val cv-orange" id="sync-stat-pending">0</div><div class="sc-delta">awaiting sync</div></div>
+      <div class="stat-card"><div class="sc-lbl">Synced to OS</div><div class="sc-val cv-green" id="sync-stat-synced">0</div><div class="sc-delta">confirmed in master</div></div>
+      <div class="stat-card"><div class="sc-lbl">Rejected by Master</div><div class="sc-val cv-red" id="sync-stat-rejected">0</div><div class="sc-delta">flagged records held</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="panel-title"><span class="ic">⟳</span>Sync Queue</div>
+        <div style="display:flex;gap:6px">
+          <button class="tb-btn" onclick="rejectAll()">Reject Flagged</button>
+          <button class="tb-btn primary" onclick="triggerSync()">Push All</button>
+        </div>
+      </div>
+      <div id="sync-queue-list"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd"><div class="panel-title"><span class="ic">📋</span>Sync Log</div><div class="panel-action" onclick="clearSyncLog()">Clear</div></div>
+      <div id="sync-log" style="font-family:monospace;font-size:10px;color:var(--text-2);padding:10px 14px;max-height:160px;overflow-y:auto;background:var(--bg-deep)">
+        <div style="color:var(--text-3)">-- No sync activity yet --</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- STATUS BAR -->
+<footer class="statusbar">
+  <div class="sb-item"><div class="sb-dot dot-green"></div>DB: digital_gm.db · <span id="sb-player-count">0</span> players</div>
+  <div class="sb-item"><div class="sb-dot dot-green"></div>OS License: Active · Elite</div>
+  <div class="sb-item"><div class="sb-dot dot-orange"></div><span id="sb-pending-count">0</span> pending sync</div>
+  <div class="sb-item"><div class="sb-dot dot-blue"></div>Phase 1 — Core pipeline</div>
+  <div class="sb-right">The Digital GM v1.0.0 · PRO-File OS dependent</div>
+</footer>
+
+<!-- ADD PLAYER MODAL -->
+<div class="modal-overlay" id="modal-add-player">
+  <div class="modal">
+    <div class="modal-hd">
+      <div class="modal-title">⊕ Add Player</div>
+      <button class="modal-close" onclick="closeModal('modal-add-player')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="field required" id="f-full_name"><label>Full Name</label><input id="inp-full_name" placeholder="First Last" oninput="validateField('full_name')"/><div class="err-msg" id="err-full_name"></div></div>
+        <div class="field required" id="f-grad_year"><label>Grad Year</label><input id="inp-grad_year" type="number" placeholder="2026" min="2024" max="2035" oninput="validateField('grad_year')"/><div class="err-msg" id="err-grad_year"></div></div>
+      </div>
+      <div class="form-grid three" style="margin-bottom:12px">
+        <div class="field required" id="f-position"><label>Position</label>
+          <select id="inp-position" onchange="validateField('position')">
+            <option value="">Select...</option>
+            <option>PG</option><option>SG</option><option>SF</option><option>PF</option><option>C</option><option>G</option><option>F</option><option>G/F</option><option>F/C</option>
+          </select><div class="err-msg" id="err-position"></div>
+        </div>
+        <div class="field" id="f-height_inches"><label>Height (inches)</label><input id="inp-height_inches" type="number" placeholder="76" min="48" max="96" oninput="validateField('height_inches')"/><div class="err-msg" id="err-height_inches"></div></div>
+        <div class="field" id="f-weight_lbs"><label>Weight (lbs)</label><input id="inp-weight_lbs" type="number" placeholder="185"/></div>
+      </div>
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="field required" id="f-high_school"><label>High School</label><input id="inp-high_school" placeholder="School name" oninput="validateField('high_school')"/><div class="err-msg" id="err-high_school"></div></div>
+        <div class="field" id="f-aau_program"><label>AAU Program</label><input id="inp-aau_program" placeholder="Team name (optional)"/></div>
+      </div>
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="field required" id="f-eligibility_status"><label>Eligibility</label>
+          <select id="inp-eligibility_status" onchange="validateField('eligibility_status')">
+            <option value="">Select...</option>
+            <option>Active</option><option>Committed</option><option>Signed</option><option>Transfer</option><option>Pro</option>
+          </select><div class="err-msg" id="err-eligibility_status"></div>
+        </div>
+        <div class="field" id="f-committed_college"><label>Committed College</label><input id="inp-committed_college" placeholder="If committed/signed"/></div>
+      </div>
+      <div class="form-grid" style="margin-bottom:12px">
+        <div class="field" id="f-ncaa_id"><label>NCAA ID</label><input id="inp-ncaa_id" placeholder="10-digit number (optional)" oninput="validateField('ncaa_id')"/><div class="err-msg" id="err-ncaa_id"></div></div>
+        <div class="field" id="f-wingspan_inches"><label>Wingspan (inches)</label><input id="inp-wingspan_inches" type="number" placeholder="78 (optional)"/></div>
+      </div>
+      <div id="form-flag-preview" style="display:none;background:var(--orange-dim);border:1px solid var(--orange);border-radius:7px;padding:10px 12px;margin-top:4px">
+        <div style="font-size:10px;font-weight:700;color:var(--orange);margin-bottom:4px">⚠ Record will be flagged for verification:</div>
+        <div id="form-flag-reasons" style="font-size:11px;color:var(--text-2)"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="tb-btn" onclick="closeModal('modal-add-player')">Cancel</button>
+      <button class="tb-btn primary" onclick="submitAddPlayer()">Save Player</button>
+    </div>
+  </div>
+</div>
+
+<!-- PLAYER DETAIL MODAL -->
+<div class="modal-overlay" id="modal-player-detail">
+  <div class="modal" style="width:500px">
+    <div class="modal-hd">
+      <div class="modal-title" id="detail-title">Player Detail</div>
+      <button class="modal-close" onclick="closeModal('modal-player-detail')">✕</button>
+    </div>
+    <div class="modal-body" id="detail-body"></div>
+    <div class="modal-foot">
+      <button class="tb-btn" id="detail-sync-btn" onclick="syncSingleFromDetail()">⟳ Sync to OS</button>
+      <button class="tb-btn" onclick="closeModal('modal-player-detail')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST STACK -->
+<div class="toast-stack" id="toast-stack"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let players = [];
+let ingestLog = [];
+let syncLog = [];
+let pendingCSV = null;
+let detailPlayerId = null;
+
+const VALID_POSITIONS = ['PG','SG','SF','PF','C','G','F','G/F','F/C'];
+const VALID_ELIGIBILITY = ['Active','Committed','Signed','Transfer','Pro'];
+const PLAYER_SCHEMA = ['full_name','grad_year','position','high_school','aau_program',
+  'height_inches','weight_lbs','wingspan_inches','eligibility_status',
+  'committed_college','ncaa_id'];
+
+// ══════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════
+function nav(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('nav-' + page).classList.add('active');
+  if (page === 'roster') renderRosterTable();
+  if (page === 'sync') renderSyncPanel();
+  if (page === 'dashboard') renderDashboard();
+}
+
+function comingSoon(name) {
+  toast(`${name} — Phase 3 module. Coming after core pipeline.`, 'warn');
+}
+
+// ══════════════════════════════════════════════════
+// SANITIZER (mirrors core/sanitizer.py)
+// ══════════════════════════════════════════════════
+function sanitizeRecord(raw, ingestedBy = 'J. Johnson') {
+  const flags = [];
+  const now = new Date().toISOString();
+
+  const fullName = (raw.full_name || raw['Full Name'] || '').trim();
+  const gradYear = parseInt(raw.grad_year || raw['Grad Year'] || raw['grad_year']);
+  const position = (raw.position || raw['Position'] || '').trim();
+  const highSchool = (raw.high_school || raw['High School'] || '').trim();
+  const heightIn = parseInt(raw.height_inches || raw['Height (inches)'] || raw['Height']);
+  const eligibility = (raw.eligibility_status || raw['Eligibility'] || '').trim();
+  const ncaaId = (raw.ncaa_id || raw['NCAA ID'] || '').trim();
+
+  if (!fullName) flags.push('Missing full name');
+  else if (/\d/.test(fullName)) flags.push('Full name contains numeric characters');
+  if (!highSchool) flags.push('Missing high school affiliation');
+  if (isNaN(heightIn) || heightIn === null || raw.height_inches === '') flags.push('Missing height — physical metrics incomplete');
+  if (isNaN(gradYear) || gradYear < 2024 || gradYear > 2035) flags.push('Invalid or missing grad year');
+  if (!VALID_POSITIONS.includes(position)) flags.push('Invalid or missing position');
+  if (!VALID_ELIGIBILITY.includes(eligibility)) flags.push('Invalid eligibility status');
+  if (ncaaId && (!/^\d+$/.test(ncaaId) || ncaaId.length !== 10)) flags.push('NCAA ID must be 10-digit numeric string');
+
+  return {
+    player_id: crypto.randomUUID(),
+    full_name: fullName || null,
+    grad_year: isNaN(gradYear) ? null : gradYear,
+    position: VALID_POSITIONS.includes(position) ? position : null,
+    high_school: highSchool || null,
+    aau_program: (raw.aau_program || raw['AAU Program'] || '').trim() || null,
+    height_inches: isNaN(heightIn) ? null : heightIn,
+    weight_lbs: parseInt(raw.weight_lbs || raw['Weight'] || '') || null,
+    wingspan_inches: parseInt(raw.wingspan_inches || raw['Wingspan'] || '') || null,
+    eligibility_status: VALID_ELIGIBILITY.includes(eligibility) ? eligibility : null,
+    committed_college: (raw.committed_college || raw['Committed College'] || '').trim() || null,
+    ncaa_id: ncaaId || null,
+    data_source: raw.data_source || 'manual',
+    ingestion_date: now,
+    last_modified: now,
+    ingested_by: ingestedBy,
+    verification_needed: flags.length > 0,
+    verification_reason: flags.join(' | '),
+    sync_status: 'pending',
+  };
+}
+
+// ══════════════════════════════════════════════════
+// ADD PLAYER FORM
+// ══════════════════════════════════════════════════
+function openAddPlayer() {
+  clearForm();
+  openModal('modal-add-player');
+}
+
+function clearForm() {
+  PLAYER_SCHEMA.forEach(f => {
+    const el = document.getElementById('inp-' + f);
+    if (el) el.value = '';
+    clearFieldErr(f);
+  });
+  document.getElementById('form-flag-preview').style.display = 'none';
+}
+
+const validators = {
+  full_name: v => !v ? 'Required' : /\d/.test(v) ? 'No numbers in name' : '',
+  grad_year: v => !v ? 'Required' : (parseInt(v) < 2024 || parseInt(v) > 2035) ? 'Must be 2024–2035' : '',
+  position: v => !v ? 'Required' : '',
+  high_school: v => !v ? 'Required' : '',
+  eligibility_status: v => !v ? 'Required' : '',
+  height_inches: v => v && (parseInt(v) < 48 || parseInt(v) > 96) ? 'Must be 48–96 inches' : '',
+  ncaa_id: v => v && (!/^\d+$/.test(v) || v.length !== 10) ? 'Must be 10-digit number' : '',
+};
+
+function validateField(field) {
+  const el = document.getElementById('inp-' + field);
+  const val = el ? el.value.trim() : '';
+  const fn = validators[field];
+  const err = fn ? fn(val) : '';
+  if (err) setFieldErr(field, err); else clearFieldErr(field);
+  updateFlagPreview();
+  return !err;
+}
+
+function setFieldErr(field, msg) {
+  const f = document.getElementById('f-' + field);
+  const e = document.getElementById('err-' + field);
+  if (f) f.classList.add('has-err');
+  if (e) e.textContent = msg;
+}
+function clearFieldErr(field) {
+  const f = document.getElementById('f-' + field);
+  const e = document.getElementById('err-' + field);
+  if (f) f.classList.remove('has-err');
+  if (e) e.textContent = '';
+}
+
+function updateFlagPreview() {
+  const raw = getFormValues();
+  const record = sanitizeRecord(raw);
+  const preview = document.getElementById('form-flag-preview');
+  const reasons = document.getElementById('form-flag-reasons');
+  if (record.verification_needed) {
+    preview.style.display = 'block';
+    reasons.textContent = record.verification_reason;
+  } else {
+    preview.style.display = 'none';
+  }
+}
+
+function getFormValues() {
+  const obj = {};
+  PLAYER_SCHEMA.forEach(f => {
+    const el = document.getElementById('inp-' + f);
+    if (el) obj[f] = el.value.trim();
+  });
+  return obj;
+}
+
+function submitAddPlayer() {
+  const required = ['full_name','grad_year','position','high_school','eligibility_status'];
+  let valid = true;
+  required.forEach(f => { if (!validateField(f)) valid = false; });
+  // Non-blocking fields
+  ['height_inches','ncaa_id'].forEach(f => validateField(f));
+  if (!valid) { toast('Fix required fields before saving.', 'error'); return; }
+
+  const raw = getFormValues();
+  raw.data_source = 'manual';
+  const record = sanitizeRecord(raw, 'J. Johnson');
+  players.push(record);
+
+  addIngestLog(`[manual] ${record.full_name || 'Unnamed'} — ${record.verification_needed ? '⚠ FLAGGED: ' + record.verification_reason : '✓ Clean'}`);
+  closeModal('modal-add-player');
+  updateAll();
+  const msg = record.verification_needed
+    ? `Player saved with flags: ${record.verification_reason}`
+    : `${record.full_name} added — clean record, pending sync.`;
+  toast(msg, record.verification_needed ? 'warn' : 'success');
+}
+
+// ══════════════════════════════════════════════════
+// CSV INGESTION
+// ══════════════════════════════════════════════════
+function dzOver(e) { e.preventDefault(); document.getElementById('drop-zone').classList.add('over'); }
+function dzLeave(e) { document.getElementById('drop-zone').classList.remove('over'); }
+function dzDrop(e) {
+  e.preventDefault();
+  document.getElementById('drop-zone').classList.remove('over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.name.endsWith('.csv')) processCSV(file);
+  else toast('Please drop a .csv file.', 'error');
+}
+function handleCSVFile(e) {
+  const file = e.target.files[0];
+  if (file) processCSV(file);
+}
+function processCSV(file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const lines = e.target.result.trim().split('\n').filter(l => l.trim());
+    if (lines.length < 2) { toast('CSV is empty or has no data rows.', 'error'); return; }
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+    const rows = lines.slice(1).map(line => {
+      const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g,''));
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = vals[i] || '');
+      return obj;
+    });
+    pendingCSV = { headers, rows, fileName: file.name };
+    showCSVPreview(headers, rows);
+    toast(`CSV loaded: ${rows.length} rows from ${file.name}`, 'success');
+  };
+  reader.readAsText(file);
+}
+function showCSVPreview(headers, rows) {
+  const preview = document.getElementById('csv-preview');
+  document.getElementById('csv-count').textContent = `${rows.length} records · ${headers.length} columns`;
+  const thead = document.getElementById('csv-thead');
+  thead.innerHTML = headers.map(h => `<th>${h}</th>`).join('');
+  const tbody = document.getElementById('csv-tbody');
+  tbody.innerHTML = rows.slice(0, 5).map(r =>
+    `<tr>${headers.map(h => `<td>${r[h] || ''}</td>`).join('')}</tr>`
+  ).join('');
+  if (rows.length > 5) tbody.innerHTML += `<tr><td colspan="${headers.length}" style="color:var(--text-3);text-align:center">+${rows.length-5} more rows...</td></tr>`;
+  preview.style.display = 'block';
+}
+function importCSV() {
+  if (!pendingCSV) return;
+  let clean = 0, flagged = 0;
+  const newPlayers = pendingCSV.rows.map(row => {
+    const r = sanitizeRecord(row, 'J. Johnson');
+    r.data_source = 'csv_import';
+    if (r.verification_needed) flagged++; else clean++;
+    return r;
+  });
+  players = players.concat(newPlayers);
+  addIngestLog(`[csv_import] ${pendingCSV.fileName} — ${pendingCSV.rows.length} records: ${clean} clean, ${flagged} flagged`);
+  newPlayers.forEach(p => {
+    addIngestLog(`  → ${p.full_name || '(unnamed)'} [${p.data_source}] — ${p.verification_needed ? '⚠ ' + p.verification_reason : '✓ clean'}`);
+  });
+  toast(`CSV imported: ${clean} clean · ${flagged} flagged · all queued for sync`, flagged > 0 ? 'warn' : 'success');
+  cancelCSV();
+  updateAll();
+  if (document.getElementById('nb-ingest')) {
+    document.getElementById('nb-ingest').style.display = 'none';
+  }
+}
+function cancelCSV() {
+  pendingCSV = null;
+  document.getElementById('csv-preview').style.display = 'none';
+  document.getElementById('csv-file-input').value = '';
+}
+
+// ══════════════════════════════════════════════════
+// DEMO ROSTER
+// ══════════════════════════════════════════════════
+const DEMO_PLAYERS = [
+  {full_name:'Marcus Webb',grad_year:2026,position:'PG',high_school:'Duncanville HS',aau_program:'Team Loaded DFW',height_inches:76,weight_lbs:185,eligibility_status:'Committed',committed_college:'Baylor University',ncaa_id:''},
+  {full_name:"D'Andre Simmons",grad_year:2026,position:'SF',high_school:'Mansfield Legacy',aau_program:'Pro One',height_inches:'',weight_lbs:200,eligibility_status:'Active'},
+  {full_name:'Jaylen Brooks',grad_year:2027,position:'C',high_school:'South Grand Prairie',aau_program:'',height_inches:83,weight_lbs:235,eligibility_status:'Active'},
+  {full_name:"Tre'Von Miles",grad_year:2026,position:'SG',high_school:'Kimball HS',aau_program:'Mokan Elite',height_inches:77,weight_lbs:180,eligibility_status:'Signed',committed_college:'TCU'},
+  {full_name:'Kofi Asante',grad_year:2027,position:'PF',high_school:'',aau_program:'Team Thad',height_inches:80,weight_lbs:215,eligibility_status:'Active'},
+  {full_name:'Devon Hargrove',grad_year:2026,position:'G/F',high_school:'Desoto HS',aau_program:'Texas Hardwork',height_inches:78,weight_lbs:190,eligibility_status:'Transfer'},
+  {full_name:'Isaiah Phelps',grad_year:2028,position:'PG',high_school:'Garland HS',aau_program:'',height_inches:74,weight_lbs:165,eligibility_status:'Active'},
+  {full_name:'Jordan Tate',grad_year:2026,position:'F/C',high_school:'Cedar Hill HS',aau_program:'Team Griffin',height_inches:81,weight_lbs:225,eligibility_status:'Active',ncaa_id:'1234567890'},
+  {full_name:'',grad_year:2027,position:'',high_school:'North Mesquite',aau_program:'',height_inches:75,eligibility_status:'Active'},
+  {full_name:'Xavier Booker',grad_year:2030,position:'SF',high_school:'Life HS',aau_program:'',height_inches:79,weight_lbs:185,eligibility_status:'Active'},
+  {full_name:'Caleb Harrison',grad_year:2025,position:'SG',high_school:'Allen HS',aau_program:'Nike Elite',height_inches:76,weight_lbs:175,eligibility_status:'Committed',committed_college:'Kansas'},
+  {full_name:'Devontae1 Smith',grad_year:2026,position:'PF',high_school:'Plano East',aau_program:'Texas Hoops',height_inches:80,weight_lbs:210,eligibility_status:'Active'},
+];
+
+function loadDemoRoster() {
+  players = [];
+  DEMO_PLAYERS.forEach(p => {
+    const r = sanitizeRecord(p, 'J. Johnson');
+    r.data_source = 'csv_import';
+    players.push(r);
+  });
+  const clean = players.filter(p => !p.verification_needed).length;
+  const flagged = players.filter(p => p.verification_needed).length;
+  addIngestLog(`[demo] Loaded 12-player demo roster — ${clean} clean, ${flagged} flagged`);
+  players.filter(p => p.verification_needed).forEach(p => {
+    addIngestLog(`  ⚠ ${p.full_name || '(unnamed)'}: ${p.verification_reason}`);
+  });
+  updateAll();
+  toast(`Demo roster loaded: ${clean} clean · ${flagged} flagged`, 'success');
+  nav('roster');
+}
+
+function clearAllPlayers() {
+  if (players.length === 0) { toast('No players to clear.', 'warn'); return; }
+  players = [];
+  addIngestLog('[system] All players cleared from local DB');
+  updateAll();
+  toast('All player records cleared.', 'warn');
+}
+
+// ══════════════════════════════════════════════════
+// SYNC
+// ══════════════════════════════════════════════════
+let lastSyncTime = null;
+
+function triggerSync() {
+  const pending = players.filter(p => p.sync_status === 'pending');
+  if (pending.length === 0) { toast('Nothing to sync — queue is empty.', 'warn'); return; }
+
+  toast(`Syncing ${pending.length} records to PRO-File OS...`, 'success');
+  addSyncLog(`[sync] Pushing ${pending.length} pending record(s) to PRO-File OS...`);
+
+  let i = 0;
+  function syncNext() {
+    if (i >= pending.length) {
+      lastSyncTime = new Date();
+      updateAll();
+      toast(`Sync complete. ${pending.length} records pushed.`, 'success');
+      addSyncLog(`[sync] ✓ Complete — ${pending.length} records confirmed`);
+      return;
+    }
+    const p = pending[i];
+    setTimeout(() => {
+      // Flagged records get rejected by master; clean ones sync
+      if (p.verification_needed) {
+        p.sync_status = 'rejected_by_master';
+        addSyncLog(`  ✗ REJECTED: ${p.full_name || '(unnamed)'} — ${p.verification_reason}`);
+      } else {
+        p.sync_status = 'synced';
+        addSyncLog(`  ✓ SYNCED: ${p.full_name}`);
+      }
+      updateAll();
+      i++;
+      syncNext();
+    }, 200 + Math.random() * 150);
+  }
+  syncNext();
+}
+
+function rejectAll() {
+  const flagged = players.filter(p => p.sync_status === 'pending' && p.verification_needed);
+  if (!flagged.length) { toast('No flagged pending records to reject.', 'warn'); return; }
+  flagged.forEach(p => { p.sync_status = 'rejected_by_master'; });
+  addSyncLog(`[sync] Manually rejected ${flagged.length} flagged record(s)`);
+  updateAll();
+  toast(`${flagged.length} flagged records rejected.`, 'warn');
+}
+
+function syncSingleFromDetail() {
+  const p = players.find(pl => pl.player_id === detailPlayerId);
+  if (!p || p.sync_status === 'synced') { toast('Record already synced.', 'warn'); return; }
+  if (p.verification_needed) {
+    p.sync_status = 'rejected_by_master';
+    toast(`Rejected by master — ${p.verification_reason}`, 'error');
+  } else {
+    p.sync_status = 'synced';
+    toast(`${p.full_name} synced to OS.`, 'success');
+  }
+  updateAll();
+  const detailBody = document.getElementById('detail-body');
+  if (detailBody) showPlayerDetail(p.player_id);
+}
+
+// ══════════════════════════════════════════════════
+// RENDER FUNCTIONS
+// ══════════════════════════════════════════════════
+function updateAll() {
+  updateStats();
+  updateBadges();
+  renderDashboard();
+  const rosterPage = document.getElementById('page-roster');
+  if (rosterPage && rosterPage.classList.contains('active')) renderRosterTable();
+  const syncPage = document.getElementById('page-sync');
+  if (syncPage && syncPage.classList.contains('active')) renderSyncPanel();
+}
+
+function updateStats() {
+  const total = players.length;
+  const synced = players.filter(p => p.sync_status === 'synced').length;
+  const pending = players.filter(p => p.sync_status === 'pending').length;
+  const flagged = players.filter(p => p.verification_needed).length;
+  const committed = players.filter(p => ['Committed','Signed'].includes(p.eligibility_status)).length;
+
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-synced').textContent = synced;
+  document.getElementById('stat-pending').textContent = pending;
+  document.getElementById('stat-flagged').textContent = flagged;
+  document.getElementById('stat-committed').textContent = committed;
+  document.getElementById('stat-synced-d').textContent = `of ${total} players`;
+  document.getElementById('stat-total-d').textContent = total === 0 ? 'No players yet' : `${total} on roster`;
+  document.getElementById('pipe-sync-val').textContent = pending;
+
+  document.getElementById('sb-player-count').textContent = total;
+  document.getElementById('sb-pending-count').textContent = pending;
+  document.getElementById('sb-sync-lbl').textContent = pending + ' Pending Sync';
+  document.getElementById('sb-sync-sub').textContent = lastSyncTime
+    ? 'Last sync: ' + lastSyncTime.toLocaleTimeString()
+    : 'Last sync: never';
+
+  if (document.getElementById('sync-stat-pending')) {
+    document.getElementById('sync-stat-pending').textContent = pending;
+    document.getElementById('sync-stat-synced').textContent = synced;
+    document.getElementById('sync-stat-rejected').textContent = players.filter(p => p.sync_status === 'rejected_by_master').length;
+  }
+}
+
+function updateBadges() {
+  document.getElementById('nb-roster').textContent = players.length;
+  const pending = players.filter(p => p.sync_status === 'pending').length;
+  document.getElementById('nb-sync').textContent = pending;
+}
+
+function renderDashboard() {
+  updateStats();
+  // Roster preview (first 7)
+  const tbody = document.getElementById('dash-roster-body');
+  const preview = players.slice(0,7);
+  tbody.innerHTML = preview.length === 0
+    ? `<tr><td colspan="7" style="text-align:center;color:var(--text-3);padding:20px">No players yet — add one or load the demo roster.</td></tr>`
+    : preview.map(p => playerRow(p, true)).join('');
+
+  // Flag queue
+  const flagList = document.getElementById('dash-flag-list');
+  const flagged = players.filter(p => p.verification_needed);
+  flagList.innerHTML = flagged.length === 0
+    ? `<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-title">No flagged records</div></div>`
+    : flagged.slice(0,5).map(p => `
+      <div class="flag-item" onclick="showPlayerDetail('${p.player_id}')">
+        <div class="fi-name">${p.full_name || '(unnamed record)'}</div>
+        <div class="fi-reason">${p.verification_reason}</div>
+        <div class="fi-meta">${p.ingested_by} · ${p.data_source}</div>
+      </div>`).join('');
+
+  // Sync queue preview
+  const syncList = document.getElementById('dash-sync-list');
+  const pendingPlayers = players.filter(p => p.sync_status === 'pending').slice(0,4);
+  syncList.innerHTML = pendingPlayers.length === 0
+    ? `<div class="empty-state"><div class="empty-icon">✓</div><div class="empty-title">Queue empty</div></div>`
+    : pendingPlayers.map(p => `
+      <div class="sq-item">
+        <div class="sq-av">${initials(p.full_name)}</div>
+        <div class="sq-info"><div class="sq-name">${p.full_name || '(unnamed)'}</div><div class="sq-sub">${p.sync_status} · ${p.verification_needed ? 'flagged' : 'clean'}</div></div>
+        <span class="badge b-${p.verification_needed ? 'flagged' : 'pending'}">${p.verification_needed ? '⚠ flagged' : 'pending'}</span>
+      </div>`).join('');
+}
+
+function renderRosterTable() {
+  const search = document.getElementById('roster-search')?.value.toLowerCase() || '';
+  const eligFilter = document.getElementById('roster-filter-elig')?.value || '';
+  const syncFilter = document.getElementById('roster-filter-sync')?.value || '';
+
+  let filtered = players.filter(p => {
+    const matchSearch = !search || (p.full_name||'').toLowerCase().includes(search) || (p.high_school||'').toLowerCase().includes(search) || (p.position||'').toLowerCase().includes(search);
+    const matchElig = !eligFilter || p.eligibility_status === eligFilter;
+    const matchSync = !syncFilter || p.sync_status === syncFilter;
+    return matchSearch && matchElig && matchSync;
+  });
+
+  const flaggedCount = players.filter(p => p.verification_needed).length;
+  document.getElementById('roster-sub').textContent = `${players.length} players · ${flaggedCount} flagged`;
+
+  const tbody = document.getElementById('roster-body');
+  tbody.innerHTML = filtered.length === 0
+    ? `<tr><td colspan="10" style="text-align:center;color:var(--text-3);padding:30px">No players match your filters.</td></tr>`
+    : filtered.map(p => playerRow(p, false)).join('');
+}
+
+function playerRow(p, compact) {
+  const ht = p.height_inches ? fmtHeight(p.height_inches) : '—';
+  const wt = p.weight_lbs ? p.weight_lbs + ' lbs' : '—';
+  const grade = p.grad_year || '—';
+  const school = p.high_school || '—';
+  const flag = p.verification_needed ? `<span class="flag-icon" title="${p.verification_reason}">⚠</span>` : '';
+  const eligClass = {'Active':'b-active','Committed':'b-committed','Signed':'b-signed','Transfer':'b-transfer','Pro':'b-pro'}[p.eligibility_status] || 'b-active';
+  const syncClass = {'synced':'b-synced','pending':'b-pending','rejected_by_master':'b-rejected'}[p.sync_status] || 'b-pending';
+
+  if (compact) {
+    return `<tr onclick="showPlayerDetail('${p.player_id}')">
+      <td class="td-name">${p.full_name || '<span style="color:var(--text-3)">(unnamed)</span>'}</td>
+      <td>${p.position ? `<span class="badge b-pos">${p.position}</span>` : '—'}</td>
+      <td>${ht}</td><td>${grade}</td>
+      <td>${p.eligibility_status ? `<span class="badge ${eligClass}">${p.eligibility_status}</span>` : '—'}</td>
+      <td><span class="badge ${syncClass}">${p.sync_status}</span></td>
+      <td>${flag}</td>
+    </tr>`;
+  }
+  return `<tr onclick="showPlayerDetail('${p.player_id}')">
+    <td class="td-name">${p.full_name || '<span style="color:var(--text-3)">(unnamed)</span>'}</td>
+    <td>${p.position ? `<span class="badge b-pos">${p.position}</span>` : '—'}</td>
+    <td>${ht}</td><td>${wt}</td><td>${grade}</td><td>${school}</td>
+    <td>${p.eligibility_status ? `<span class="badge ${eligClass}">${p.eligibility_status}</span>` : '—'}</td>
+    <td><span class="badge ${{manual:'b-manual',csv_import:'b-csv',api_sync:'b-pos'}[p.data_source]||'b-manual'}">${p.data_source}</span></td>
+    <td><span class="badge ${syncClass}">${p.sync_status}</span></td>
+    <td>${flag}</td>
+  </tr>`;
+}
+
+function renderSyncPanel() {
+  updateStats();
+  const list = document.getElementById('sync-queue-list');
+  const pending = players.filter(p => p.sync_status === 'pending');
+  list.innerHTML = pending.length === 0
+    ? `<div class="empty-state" style="padding:30px"><div class="empty-icon">✓</div><div class="empty-title">Sync queue empty</div><div class="empty-sub">All records have been pushed or are awaiting ingestion</div></div>`
+    : pending.map(p => `
+      <div class="sq-item">
+        <div class="sq-av">${initials(p.full_name)}</div>
+        <div class="sq-info">
+          <div class="sq-name">${p.full_name || '(unnamed)'}</div>
+          <div class="sq-sub">${p.high_school || 'No school'} · ${p.data_source} · ${p.verification_needed ? '⚠ flagged' : '✓ clean'}</div>
+        </div>
+        <div class="sq-actions">
+          <button class="sq-btn push" onclick="syncOne('${p.player_id}',event)">Push</button>
+          <button class="sq-btn skip" onclick="rejectOne('${p.player_id}',event)">Reject</button>
+        </div>
+      </div>`).join('');
+}
+
+function syncOne(id, e) {
+  e.stopPropagation();
+  const p = players.find(pl => pl.player_id === id);
+  if (!p) return;
+  if (p.verification_needed) {
+    p.sync_status = 'rejected_by_master';
+    addSyncLog(`  ✗ REJECTED: ${p.full_name || '(unnamed)'} — ${p.verification_reason}`);
+    toast(`Rejected — flagged record cannot sync until verified.`, 'error');
+  } else {
+    p.sync_status = 'synced';
+    addSyncLog(`  ✓ SYNCED: ${p.full_name}`);
+    toast(`${p.full_name} synced to PRO-File OS.`, 'success');
+  }
+  updateAll();
+}
+
+function rejectOne(id, e) {
+  e.stopPropagation();
+  const p = players.find(pl => pl.player_id === id);
+  if (!p) return;
+  p.sync_status = 'rejected_by_master';
+  addSyncLog(`  ✗ MANUALLY REJECTED: ${p.full_name || '(unnamed)'}`);
+  toast(`${p.full_name || 'Record'} rejected.`, 'warn');
+  updateAll();
+}
+
+// ══════════════════════════════════════════════════
+// PLAYER DETAIL
+// ══════════════════════════════════════════════════
+function showPlayerDetail(id) {
+  detailPlayerId = id;
+  const p = players.find(pl => pl.player_id === id);
+  if (!p) return;
+  document.getElementById('detail-title').textContent = p.full_name || '(Unnamed Record)';
+  const eligClass = {'Active':'b-active','Committed':'b-committed','Signed':'b-signed','Transfer':'b-transfer','Pro':'b-pro'}[p.eligibility_status] || 'b-active';
+  const syncClass = {'synced':'b-synced','pending':'b-pending','rejected_by_master':'b-rejected'}[p.sync_status] || 'b-pending';
+
+  const fields = [
+    ['Player ID', p.player_id, true],
+    ['Full Name', p.full_name || '—', false],
+    ['Grad Year', p.grad_year || '—', false],
+    ['Position', p.position || '—', false],
+    ['High School', p.high_school || '—', false],
+    ['AAU Program', p.aau_program || '—', false],
+    ['Height', p.height_inches ? fmtHeight(p.height_inches) : '—', false],
+    ['Weight', p.weight_lbs ? p.weight_lbs + ' lbs' : '—', false],
+    ['Wingspan', p.wingspan_inches ? fmtHeight(p.wingspan_inches) : '—', false],
+    ['Eligibility', p.eligibility_status || '—', false],
+    ['Committed To', p.committed_college || '—', false],
+    ['NCAA ID', p.ncaa_id || '—', false],
+    ['Data Source', p.data_source, false],
+    ['Ingestion Date', p.ingestion_date?.split('T')[0] || '—', false],
+    ['Ingested By', p.ingested_by, false],
+  ];
+
+  document.getElementById('detail-body').innerHTML = `
+    <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+      <span class="badge ${eligClass}">${p.eligibility_status || 'Unknown'}</span>
+      <span class="badge ${syncClass}">${p.sync_status}</span>
+      ${p.position ? `<span class="badge b-pos">${p.position}</span>` : ''}
+      ${p.verification_needed ? `<span class="badge b-flagged">⚠ Flagged</span>` : `<span class="badge b-active">✓ Clean</span>`}
+    </div>
+    ${p.verification_needed ? `<div style="background:var(--orange-dim);border:1px solid var(--orange);border-radius:7px;padding:9px 12px;margin-bottom:12px;font-size:11px;color:var(--orange)"><strong>Verification Needed:</strong> ${p.verification_reason}</div>` : ''}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      ${fields.map(([label, val, mono]) => `
+        <div style="background:var(--bg-input);border-radius:6px;padding:8px 10px">
+          <div style="font-size:9px;color:var(--text-3);font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:2px">${label}</div>
+          <div style="font-size:11px;color:var(--text-1);${mono ? 'font-family:monospace;font-size:9px;color:var(--text-3)' : ''}">${val}</div>
+        </div>`).join('')}
+    </div>`;
+
+  const syncBtn = document.getElementById('detail-sync-btn');
+  syncBtn.textContent = p.sync_status === 'synced' ? '✓ Synced' : '⟳ Sync to OS';
+  syncBtn.disabled = p.sync_status === 'synced';
+
+  openModal('modal-player-detail');
+}
+
+// ══════════════════════════════════════════════════
+// LOG HELPERS
+// ══════════════════════════════════════════════════
+function addIngestLog(msg) {
+  const now = new Date().toTimeString().slice(0,8);
+  ingestLog.unshift(`[${now}] ${msg}`);
+  const el = document.getElementById('ingest-log');
+  if (el) el.innerHTML = ingestLog.slice(0,50).map(l =>
+    `<div style="padding:1px 0;border-bottom:1px solid var(--border);${l.includes('⚠')?'color:var(--orange)':l.includes('✓')?'color:var(--green)':''}">${l}</div>`
+  ).join('');
+}
+function addSyncLog(msg) {
+  const now = new Date().toTimeString().slice(0,8);
+  syncLog.unshift(`[${now}] ${msg}`);
+  const el = document.getElementById('sync-log');
+  if (el) el.innerHTML = syncLog.slice(0,50).map(l =>
+    `<div style="padding:1px 0;border-bottom:1px solid var(--border);${l.includes('✗')||l.includes('REJECTED')?'color:var(--red)':l.includes('✓')||l.includes('SYNCED')?'color:var(--green)':''}">${l}</div>`
+  ).join('');
+}
+function clearLog() { ingestLog = []; document.getElementById('ingest-log').innerHTML = '<div style="color:var(--text-3)">-- Cleared --</div>'; }
+function clearSyncLog() { syncLog = []; document.getElementById('sync-log').innerHTML = '<div style="color:var(--text-3)">-- Cleared --</div>'; }
+
+// ══════════════════════════════════════════════════
+// MODAL + TOAST
+// ══════════════════════════════════════════════════
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+function toast(msg, type = 'success') {
+  const icons = {success:'✓', warn:'⚠', error:'✕'};
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span class="toast-ic">${icons[type]||'ℹ'}</span><span>${msg}</span>`;
+  document.getElementById('toast-stack').appendChild(el);
+  requestAnimationFrame(() => { requestAnimationFrame(() => { el.classList.add('show'); }); });
+  setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }, 3000);
+}
+
+// ══════════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════════
+function fmtHeight(inches) {
+  const ft = Math.floor(inches / 12), inch = inches % 12;
+  return `${ft}'${inch}"`;
+}
+function initials(name) {
+  if (!name) return '?';
+  const parts = name.split(' ');
+  return (parts[0][0] + (parts[1] ? parts[1][0] : '')).toUpperCase();
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+function init() {
+  // Render schema cols
+  const schemaCols = document.getElementById('schema-cols');
+  if (schemaCols) {
+    const expected = ['full_name','grad_year','position','high_school','aau_program',
+      'height_inches','weight_lbs','wingspan_inches','eligibility_status',
+      'committed_college','ncaa_id'];
+    const required = ['full_name','grad_year','position','high_school','eligibility_status'];
+    schemaCols.innerHTML = expected.map(c =>
+      `<span style="background:${required.includes(c)?'var(--accent-dim)':'var(--bg-deep)'};border:1px solid ${required.includes(c)?'var(--accent-dim)':'var(--border)'};color:${required.includes(c)?'var(--accent)':'var(--text-3)'};border-radius:4px;padding:2px 7px;font-size:9px;font-family:monospace">${c}${required.includes(c)?'*':''}</span>`
+    ).join('');
+  }
+  updateAll();
+}
+
+init();
+</script>
+</body>
+</html>

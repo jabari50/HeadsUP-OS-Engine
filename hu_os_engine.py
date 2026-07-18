@@ -9,6 +9,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from nda_router import nda_router
+from cir_api import router as cir_router
+from peg_engine import generate_peg_report, format_oracle_output
+from oracle_router import oracle_router
 from athlete_api import router as athlete_router
 
 app = FastAPI(
@@ -26,12 +29,18 @@ app.add_middleware(
         os.environ.get("FRONTEND_URL", "https://headsup-os.netlify.app"),
         "http://localhost:3000",
     ],
-    allow_methods=["GET", "POST"],
+    allow_methods=["GET", "POST", "PATCH"],
     allow_headers=["Authorization", "Content-Type"],
 )
 
 # ── Mount NDA router ──────────────────────────────────────────────────────────
 app.include_router(nda_router, prefix="/api/v1/nda", tags=["Neural Data Agency"])
+
+# ── Mount CIR router (prefix defined in cir_api.py: /api/v1/cir) ─────────────
+app.include_router(cir_router)
+
+# ── Mount Oracle router (/api/v1/oracle) ──────────────────────────────────────
+app.include_router(oracle_router)
 
 # ── Mount Athlete Onboarding router (/api/v1/athletes, incl. /score) ──────────
 app.include_router(athlete_router)

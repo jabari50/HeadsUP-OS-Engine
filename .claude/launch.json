@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "headsup-hub",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "headsup-os"],
+      "port": 3000
+    },
+    {
+      "name": "the-virtual-gm",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "the-virtual-gm", "--", "-p", "3001"],
+      "port": 3001
+    },
+    {
+      "name": "headsup-portal-web",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "headsup-portal/apps/web", "--", "-p", "3002"],
+      "port": 3002
+    },
+    {
+      "name": "foundation-site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "heads-up-foundation", "--", "-p", "3003"],
+      "port": 3003
+    }
+  ]
+}

@@ -21,7 +21,19 @@ export interface NeckUpRow {
 export interface LivePlayer extends Player {
   neckUp: NeckUpRow[];
   rated: boolean; // has a real OVR from the engine (vs. awaiting evaluation)
+  neuralAudited: boolean; // has real neck_up_* scores (full Neural Audit done)
 }
+
+const NECK_UP_COLS = [
+  "neck_up_pro_score",
+  "neck_up_culture_equity",
+  "neck_up_resilience",
+  "neck_up_coachability",
+  "neck_up_ner",
+  "neck_up_playmaking",
+  "neck_up_defense",
+  "neck_up_physical_output",
+] as const;
 
 const num = (v: unknown): number => (v == null ? 0 : Number(v));
 // Neck Up scores are stored 0–100; scale to a 0–10 bar value.
@@ -77,6 +89,9 @@ export function mapAthleteToPlayer(r: Record<string, unknown>): LivePlayer {
     rationale: "",
     neckUp,
     rated: num(r.ovr) > 0,
+    // A full Neural Audit (ALGO v4.1.0) populates the neck_up_* scores.
+    // Self-intake athletes have a real OVR but no audit yet → these stay null.
+    neuralAudited: NECK_UP_COLS.some((c) => r[c] != null && num(r[c]) > 0),
   };
 }
 

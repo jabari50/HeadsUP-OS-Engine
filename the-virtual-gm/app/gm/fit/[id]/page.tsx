@@ -118,25 +118,45 @@ export default function PlayerDetailPage() {
           </div>
         </div>
 
-        {/* neck up attribute profile (real) */}
+        {/* neck up attribute profile — only when a real Neural Audit exists.
+            Self-intake athletes have a verified OVR but no audit yet; we never
+            fabricate neck_up_* scores (Zero Hallucination Rule). */}
         <div>
           <SectionHead>Neck Up Profile</SectionHead>
-          <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-            {p.neckUp.map((row, i) => (
-              <div
-                key={row.label}
-                style={{ display: "grid", gridTemplateColumns: "minmax(120px, 168px) 1fr 64px", alignItems: "center", gap: 12 }}
-              >
-                <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>
-                  {row.label}
-                </span>
-                <BarFill pct={row.value * 10} delay={i * 60} />
-                <span className="t-mono" style={{ fontSize: 12, textAlign: "right", color: "rgba(255,255,255,0.6)" }}>
-                  {row.value.toFixed(1)} / 10
-                </span>
-              </div>
-            ))}
-          </div>
+          {p.neuralAudited ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 11 }}>
+              {p.neckUp.map((row, i) => (
+                <div
+                  key={row.label}
+                  style={{ display: "grid", gridTemplateColumns: "minmax(120px, 168px) 1fr 64px", alignItems: "center", gap: 12 }}
+                >
+                  <span style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.85)" }}>
+                    {row.label}
+                  </span>
+                  <BarFill pct={row.value * 10} delay={i * 60} />
+                  <span className="t-mono" style={{ fontSize: 12, textAlign: "right", color: "rgba(255,255,255,0.6)" }}>
+                    {row.value.toFixed(1)} / 10
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div
+              style={{
+                border: "1px dashed var(--line-dark)",
+                borderRadius: 10,
+                padding: "calc(var(--u)*2.5)",
+                color: "var(--mid)",
+                fontSize: 13,
+                lineHeight: 1.55,
+              }}
+            >
+              <strong style={{ color: "rgba(255,255,255,0.85)" }}>Awaiting Neural Audit.</strong>{" "}
+              This athlete has a verified Overall (OVR) from self-intake. The Neck Up
+              behavioral profile is populated only after a full HeadsUp Neural Audit —
+              no scores are estimated.
+            </div>
+          )}
         </div>
 
         {/* tags */}

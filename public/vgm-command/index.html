@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Virtual GM — Lancaster Tigers Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --navy-900: #0C1830;   /* app background */
+    --navy-800: #112240;   /* brand navy — primary panel */
+    --navy-750: #142A4E;
+    --navy-700: #18305A;   /* elevated / hover */
+    --navy-600: #20406F;
+    --teal: #00C896;       /* action color (tweakable) */
+    --teal-dim: rgba(0,200,150,0.14);
+    --teal-line: rgba(0,200,150,0.30);
+    --white: #FFFFFF;
+    --offwhite: #F4F4F0;
+    --gray: #8A8F99;
+    --gray-dim: rgba(138,143,153,0.30);
+    --gold: #F5C518;
+    --hair: rgba(255,255,255,0.08);
+    --hair-2: rgba(255,255,255,0.13);
+
+    --pad: 28px;          /* density-driven */
+    --gap: 20px;
+    --card-pad: 22px;
+    --font-scale: 1;
+
+    --sidebar-w: 232px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--navy-900);
+    color: var(--white);
+    font-family: 'Montserrat', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  #root { min-height: 100vh; }
+
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: var(--navy-900); }
+  ::-webkit-scrollbar-thumb { background: var(--navy-700); border-radius: 6px; border: 2px solid var(--navy-900); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--navy-600); }
+
+  .head { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.06em; line-height: 0.98; }
+  .stat { font-family: 'Oswald', sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .mono-cap { font-family: 'Montserrat', sans-serif; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; }
+
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+
+  /* keep focus rings tasteful */
+  button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--teal); outline-offset: 2px; }
+
+  @keyframes vgmFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .screen-enter { animation: vgmFade 0.34s cubic-bezier(.2,.7,.2,1) both; }
+
+  @keyframes barGrow { from { width: 0; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="ui.jsx"></script>
+<script type="text/babel" src="screen_dashboard.jsx"></script>
+<script type="text/babel" src="screen_draftboard.jsx"></script>
+<script type="text/babel" src="screen_matchmaking.jsx"></script>
+<script type="text/babel" src="screen_activation.jsx"></script>
+<script type="text/babel" src="screen_rib.jsx"></script>
+<script type="text/babel" src="screen_onboarding.jsx"></script>
+<script type="text/babel" src="screen_social.jsx"></script>
+<script type="text/babel" src="screen_development.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>

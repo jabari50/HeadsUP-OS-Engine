@@ -1,0 +1,1412 @@
+[
+ {
+  "name": "Cade Cunningham",
+  "hs": "Arlington Bowie",
+  "college": "Oklahoma St",
+  "team": "Detroit Pistons",
+  "height": "6'6\"",
+  "hin": 78,
+  "pos": "PG",
+  "level": "NBA"
+ },
+ {
+  "name": "Tyrese Maxey",
+  "hs": "South Garland",
+  "college": "Kentucky",
+  "team": "Philadelphia 76ers",
+  "height": "6'2\"",
+  "hin": 74,
+  "pos": "PG",
+  "level": "NBA"
+ },
+ {
+  "name": "Myles Turner",
+  "hs": "Euless Trinity",
+  "college": "Texas",
+  "team": "Indiana Pacers",
+  "height": "6'11\"",
+  "hin": 83,
+  "pos": "C",
+  "level": "NBA"
+ },
+ {
+  "name": "PJ Washington",
+  "hs": "Frisco Lone Star",
+  "college": "Kentucky",
+  "team": "Dallas Mavericks",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "PF",
+  "level": "NBA"
+ },
+ {
+  "name": "Anthony Black",
+  "hs": "Duncanville",
+  "college": "Arkansas",
+  "team": "Orlando Magic",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "PG",
+  "level": "NBA"
+ },
+ {
+  "name": "Ron Holland",
+  "hs": "Duncanville",
+  "college": "G-League Ignite",
+  "team": "Detroit Pistons",
+  "height": "6'8\"",
+  "hin": 80,
+  "pos": "F",
+  "level": "NBA"
+ },
+ {
+  "name": "Tre Johnson",
+  "hs": "Lake Highlands",
+  "college": "Texas",
+  "team": "Washington Wizards",
+  "height": "6'6\"",
+  "hin": 78,
+  "pos": "SG",
+  "level": "NBA"
+ },
+ {
+  "name": "Cason Wallace",
+  "hs": "Richardson",
+  "college": "Kentucky",
+  "team": "OKC Thunder",
+  "height": "6'4\"",
+  "hin": 76,
+  "pos": "PG",
+  "level": "NBA"
+ },
+ {
+  "name": "Keaton Wallace",
+  "hs": "Richardson",
+  "college": "UTSA",
+  "team": "Atlanta Hawks",
+  "height": "6'3\"",
+  "hin": 75,
+  "pos": "SG",
+  "level": "NBA"
+ },
+ {
+  "name": "Daniss Jenkins",
+  "hs": "Dallas Hillcrest",
+  "college": "St. John's",
+  "team": "Detroit Pistons",
+  "height": "6'4\"",
+  "hin": 76,
+  "pos": "PG",
+  "level": "NBA"
+ },
+ {
+  "name": "Drew Timme",
+  "hs": "Richardson Pearce",
+  "college": "Gonzaga",
+  "team": "Los Angeles Lakers",
+  "height": "6'10\"",
+  "hin": 82,
+  "pos": "BIG",
+  "level": "NBA"
+ },
+ {
+  "name": "Harrison Ingram",
+  "hs": "St. Mark's School of Texas",
+  "college": "North Carolina",
+  "team": "San Antonio Spurs",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "PF",
+  "level": "NBA"
+ },
+ {
+  "name": "Isaiah Crawford",
+  "hs": "North Crowley",
+  "college": "Louisiana Tech",
+  "team": "Houston Rockets",
+  "height": "6'6\"",
+  "hin": 78,
+  "pos": "WING",
+  "level": "NBA"
+ },
+ {
+  "name": "Isaiah Stevens",
+  "hs": "Allen",
+  "college": "Colorado St",
+  "team": "Miami Heat",
+  "height": "6'0\"",
+  "hin": 72,
+  "pos": "PG",
+  "level": "NBA"
+ },
+ {
+  "name": "Ja'Kobe Walter",
+  "hs": "McKinney",
+  "college": "Baylor",
+  "team": "Toronto Raptors",
+  "height": "6'5\"",
+  "hin": 77,
+  "pos": "SG",
+  "level": "NBA"
+ },
+ {
+  "name": "Jalen Wilson",
+  "hs": "Denton Guyer",
+  "college": "Kansas",
+  "team": "Brooklyn Nets",
+  "height": "6'8\"",
+  "hin": 80,
+  "pos": "F",
+  "level": "NBA"
+ },
+ {
+  "name": "Jaylon Tyson",
+  "hs": "Plano John Paul II",
+  "college": "Cal",
+  "team": "Cleveland Cavaliers",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "WING",
+  "level": "NBA"
+ },
+ {
+  "name": "Jordan Walsh",
+  "hs": "Faith Family",
+  "college": "Arkansas",
+  "team": "Boston Celtics",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "WING",
+  "level": "NBA"
+ },
+ {
+  "name": "Julius Randle",
+  "hs": "Prestonwood Christian",
+  "college": "Kentucky",
+  "team": "Minnesota Timberwolves",
+  "height": "6'8\"",
+  "hin": 80,
+  "pos": "PF",
+  "level": "NBA"
+ },
+ {
+  "name": "Keyonte George",
+  "hs": "Lewisville",
+  "college": "Baylor",
+  "team": "Utah Jazz",
+  "height": "6'4\"",
+  "hin": 76,
+  "pos": "SG",
+  "level": "NBA"
+ },
+ {
+  "name": "Liam McNeeley",
+  "hs": "Pearce / Plano John Paul II",
+  "college": "UConn",
+  "team": "Charlotte Hornets",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "WING",
+  "level": "NBA"
+ },
+ {
+  "name": "Luke Kornet",
+  "hs": "Argyle Liberty Christian",
+  "college": "Vanderbilt",
+  "team": "Boston Celtics",
+  "height": "7'2\"",
+  "hin": 86,
+  "pos": "C",
+  "level": "NBA"
+ },
+ {
+  "name": "Marcus Sasser Jr",
+  "hs": "Red Oak",
+  "college": "Houston",
+  "team": "Detroit Pistons",
+  "height": "6'2\"",
+  "hin": 74,
+  "pos": "PG",
+  "level": "NBA"
+ },
+ {
+  "name": "Marcus Smart",
+  "hs": "FM Marcus",
+  "college": "Oklahoma St",
+  "team": "LA Lakers",
+  "height": "6'3\"",
+  "hin": 75,
+  "pos": "PG",
+  "level": "NBA"
+ },
+ {
+  "name": "Micah Peavy",
+  "hs": "Duncanville",
+  "college": "TCU / Georgetown",
+  "team": "New Orleans Pelicans",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "WING",
+  "level": "NBA"
+ },
+ {
+  "name": "RJ Nembhard",
+  "hs": "Keller",
+  "college": "TCU",
+  "team": "Cleveland Cavaliers",
+  "height": "6'4\"",
+  "hin": 76,
+  "pos": "SG",
+  "level": "NBA"
+ },
+ {
+  "name": "Wade Taylor IV",
+  "hs": "Lancaster",
+  "college": "Texas A&M",
+  "team": "Mexico City Capitanes",
+  "height": "6'0\"",
+  "hin": 72,
+  "pos": "PG",
+  "level": "G League"
+ },
+ {
+  "name": "Zhuric Phelps",
+  "hs": "Duncanville",
+  "college": "SMU / Texas A&M",
+  "team": "Valley Suns",
+  "height": "6'3\"",
+  "hin": 75,
+  "pos": "G",
+  "level": "G League"
+ },
+ {
+  "name": "Dink Pate",
+  "hs": "Dallas Pinkston",
+  "college": "G League Ignite",
+  "team": "Westchester Knicks",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "G",
+  "level": "G League"
+ },
+ {
+  "name": "Feron Hunt",
+  "hs": "DeSoto",
+  "college": "SMU",
+  "team": "Motor City Cruise",
+  "height": "6'8\"",
+  "hin": 80,
+  "pos": "F",
+  "level": "G League"
+ },
+ {
+  "name": "Manny Obaseki",
+  "hs": "John Paul II",
+  "college": "Texas A&M",
+  "team": "Westchester Knicks",
+  "height": "6'4\"",
+  "hin": 76,
+  "pos": "G",
+  "level": "G League"
+ },
+ {
+  "name": "Marcus Garrett",
+  "hs": "Skyline",
+  "college": "Kansas",
+  "team": "Greensboro Swarm",
+  "height": "6'5\"",
+  "hin": 77,
+  "pos": "G",
+  "level": "G League"
+ },
+ {
+  "name": "Marques Bolden",
+  "hs": "DeSoto",
+  "college": "Duke",
+  "team": "Greensboro Swarm",
+  "height": "6'11\"",
+  "hin": 83,
+  "pos": "C",
+  "level": "G League"
+ },
+ {
+  "name": "Max Abmas",
+  "hs": "Dallas Jesuit",
+  "college": "Oral Roberts / Texas",
+  "team": "Salt Lake City Stars",
+  "height": "6'0\"",
+  "hin": 72,
+  "pos": "PG",
+  "level": "G League"
+ },
+ {
+  "name": "Olin Carter",
+  "hs": "Allen",
+  "college": "San Diego",
+  "team": "Texas Legends",
+  "height": "6'2\"",
+  "hin": 74,
+  "pos": "G",
+  "level": "G League"
+ },
+ {
+  "name": "Ryan Woolridge",
+  "hs": "Lake Ridge",
+  "college": "Gonzaga",
+  "team": "Windy City Bulls",
+  "height": "6'3\"",
+  "hin": 75,
+  "pos": "PG",
+  "level": "G League"
+ },
+ {
+  "name": "Cam McGriff",
+  "hs": "South Grand Prairie",
+  "college": "Oklahoma State",
+  "team": "Salt Lake City Stars",
+  "height": "6'7\"",
+  "hin": 79,
+  "pos": "F",
+  "level": "G League"
+ },
+ {
+  "name": "Zhaire Smith",
+  "hs": "Garland",
+  "college": "Texas Tech",
+  "team": "Cleveland Charge",
+  "height": "6'4\"",
+  "hin": 76,
+  "pos": "G",
+  "level": "G League"
+ },
+ {
+  "name": "Ryan Agarwal",
+  "hs": "Coppell",
+  "college": "Stanford",
+  "team": "Stanford",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Sam Aletan",
+  "hs": "Lake Highlands",
+  "college": "Yale → Providence",
+  "team": "Providence",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Malek Archie",
+  "hs": "McKinney",
+  "college": "Tarleton St",
+  "team": "Tarleton St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Kuol Atak",
+  "hs": "Haltom",
+  "college": "Oklahoma",
+  "team": "Oklahoma",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cam Barnes",
+  "hs": "Duncanville",
+  "college": "Illinois State",
+  "team": "Illinois State",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Dillon Battie",
+  "hs": "Lancaster",
+  "college": "Wichita St",
+  "team": "Wichita St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Khaden Bennett",
+  "hs": "SGP",
+  "college": "Wyoming",
+  "team": "Wyoming",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Finley Bizjack",
+  "hs": "Byron Nelson",
+  "college": "Butler",
+  "team": "Butler",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "CJ Booker",
+  "hs": "Arlington Seguin",
+  "college": "SELA",
+  "team": "SELA",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "TJohnn Brown",
+  "hs": "Dallas Kimball",
+  "college": "McNeese St → UTRGV",
+  "team": "UTRGV",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "TJ Burch",
+  "hs": "TACA",
+  "college": "Cleveland St",
+  "team": "Cleveland St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "TJ Caldwell",
+  "hs": "Faith Family",
+  "college": "Ark St",
+  "team": "Ark St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Lance Carr",
+  "hs": "Dallas Kimball",
+  "college": "UAB",
+  "team": "UAB",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cam Carroll",
+  "hs": "South Grand Prairie",
+  "college": "Rice",
+  "team": "Rice",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Narit Chechnovic",
+  "hs": "Plano East",
+  "college": "SFA",
+  "team": "SFA",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Nic Codie",
+  "hs": "Carrolton Newman Smith",
+  "college": "Texas → SMU",
+  "team": "SMU",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Javen Colbert",
+  "hs": "Decatur",
+  "college": "Troy",
+  "team": "Troy",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cobe Coleman",
+  "hs": "Faith Family",
+  "college": "Sam Houston",
+  "team": "Sam Houston",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Tayton Connerway",
+  "hs": "Burleson Centennial",
+  "college": "Indiana",
+  "team": "Indiana",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cam Corhen",
+  "hs": "Allen",
+  "college": "Pitt",
+  "team": "Pitt",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cruz Davis",
+  "hs": "iSchool Lewisville",
+  "college": "Hofstra → Texas Tech",
+  "team": "Texas Tech",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Jaylen Dean-Vines",
+  "hs": "Dallas Kimball",
+  "college": "Vanderbilt → McNeese St",
+  "team": "McNeese St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Lee Dort",
+  "hs": "Greenhill",
+  "college": "Cal-Berkeley",
+  "team": "Cal-Berkeley",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Kade Douglas",
+  "hs": "Lancaster",
+  "college": "Tarleton St",
+  "team": "Tarleton St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Kayden Edwards",
+  "hs": "Duncanville",
+  "college": "TCU → Creighton",
+  "team": "Creighton",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Zuby Ejiofor",
+  "hs": "Garland",
+  "college": "St Johns",
+  "team": "St Johns",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Frank Emmou",
+  "hs": "Mansfield Summit",
+  "college": "Texas St",
+  "team": "Texas St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cole Franklin",
+  "hs": "DeSoto",
+  "college": "UNT",
+  "team": "UNT",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Devyn Franklin",
+  "hs": "South Oak Cliff",
+  "college": "Grambling St",
+  "team": "Grambling St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Chauncey Gibson",
+  "hs": "Dallas Kimball",
+  "college": "Chicago St",
+  "team": "Chicago St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Mason Gibson",
+  "hs": "Allen",
+  "college": "TAMU-CC",
+  "team": "TAMU-CC",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "King Grace",
+  "hs": "Waxahachie",
+  "college": "Miss St",
+  "team": "Miss St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Corbin Green",
+  "hs": "Midlothian",
+  "college": "Troy",
+  "team": "Troy",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Jeremiah Green",
+  "hs": "Denton Guyer",
+  "college": "Texas A&M",
+  "team": "Texas A&M",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Rylan Griffin",
+  "hs": "Richardson",
+  "college": "Texas A&M",
+  "team": "Texas A&M",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "DJ Hall",
+  "hs": "Plano East",
+  "college": "Texas St",
+  "team": "Texas St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Jazz Henderson",
+  "hs": "Faith Family",
+  "college": "Texas Tech",
+  "team": "Texas Tech",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Dallas Hobbs",
+  "hs": "Faith Family",
+  "college": "Rice",
+  "team": "Rice",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Leon Horner",
+  "hs": "Dynamic Prep",
+  "college": "Texas Tech",
+  "team": "Texas Tech",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cam Amboree",
+  "hs": "Keller",
+  "college": "Southern",
+  "team": "Southern",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Kordell Jefferson",
+  "hs": "Arlington Martin",
+  "college": "Houston",
+  "team": "Houston",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Robert Jennings II",
+  "hs": "Desoto/TACA",
+  "college": "Oklahoma St",
+  "team": "Oklahoma St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "RJ Jones",
+  "hs": "Denton Braswell",
+  "college": "TCU",
+  "team": "TCU",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Leroy Kelly",
+  "hs": "Dynamic Prep",
+  "college": "Tarleton St",
+  "team": "Tarleton St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Tate Laczkowski",
+  "hs": "Dallas Jesuit",
+  "college": "Army",
+  "team": "Army",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "KJ Lewis",
+  "hs": "Duncanville",
+  "college": "Georgetown",
+  "team": "Georgetown",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Kyeron Lindsay-Martin",
+  "hs": "Denton Guyer",
+  "college": "UAB",
+  "team": "UAB",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Jordan Lowery",
+  "hs": "Denton Guyer",
+  "college": "UT-Arlington",
+  "team": "UT-Arlington",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Joey Madimba",
+  "hs": "Mans Timberview",
+  "college": "Prairie View",
+  "team": "Prairie View",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Isaiah Manning",
+  "hs": "Mansfield Legacy",
+  "college": "Sam Houston",
+  "team": "Sam Houston",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Tyran Mason",
+  "hs": "Plano",
+  "college": "UT-Arlington",
+  "team": "UT-Arlington",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Justin McBride",
+  "hs": "Plano",
+  "college": "James Madison",
+  "team": "James Madison",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Marcell McCreary",
+  "hs": "FW O.D. Wyatt",
+  "college": "UT-Arlington",
+  "team": "UT-Arlington",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Bryson McGlothin",
+  "hs": "Plano John Paull II",
+  "college": "Richmond",
+  "team": "Richmond",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Bryceon Melvin",
+  "hs": "RWG Academy",
+  "college": "SFA",
+  "team": "SFA",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Jordan Mizzell",
+  "hs": "Plano East",
+  "college": "Tarleton St",
+  "team": "Tarleton St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Chris Morgan",
+  "hs": "Lancaster",
+  "college": "Coppin St",
+  "team": "Coppin St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Arterio Morris",
+  "hs": "Dallas Kimball",
+  "college": "Bethune-Cookman",
+  "team": "Bethune-Cookman",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Tay Mosher",
+  "hs": "The Colony",
+  "college": "East Texas A&M",
+  "team": "East Texas A&M",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Ian Motta",
+  "hs": "Allen",
+  "college": "Denver",
+  "team": "Denver",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Blake Muschalek",
+  "hs": "TC-Addison",
+  "college": "Auburn",
+  "team": "Auburn",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Damon Nicholas Jr",
+  "hs": "Duncanville",
+  "college": "Sam Houston",
+  "team": "Sam Houston",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Eze Nwakamma",
+  "hs": "Byron Nelson",
+  "college": "New Orleans",
+  "team": "New Orleans",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Donovan ODay",
+  "hs": "Mans Timberview",
+  "college": "Northern Kentucky",
+  "team": "Northern Kentucky",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Jermaine Oneal Jr",
+  "hs": "Dynamic Prep",
+  "college": "SMU",
+  "team": "SMU",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Doryan Onwuchekwa",
+  "hs": "Faith Family",
+  "college": "Tulsa",
+  "team": "Tulsa",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Trenton Pane",
+  "hs": "Allen High School",
+  "college": "TAMU-CC",
+  "team": "TAMU-CC",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cam Paul",
+  "hs": "Desoto",
+  "college": "Miss St",
+  "team": "Miss St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Kobi Pearson",
+  "hs": "Lancaster",
+  "college": "TAMU-CC",
+  "team": "TAMU-CC",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Quinton Perkins",
+  "hs": "Lake Highlands",
+  "college": "Mercer",
+  "team": "Mercer",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Rytis Petraitis",
+  "hs": "The Oakridge School",
+  "college": "Cal-Berkeley",
+  "team": "Cal-Berkeley",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Evan Phelps",
+  "hs": "Duncanville",
+  "college": "East Texas A&M",
+  "team": "East Texas A&M",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Duncan Powell",
+  "hs": "DeSoto",
+  "college": "Providence",
+  "team": "Providence",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Chance Puryear",
+  "hs": "Dallas Carter",
+  "college": "SMU",
+  "team": "SMU",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Amari Reed",
+  "hs": "Lancaster",
+  "college": "UT-Arlington",
+  "team": "UT-Arlington",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Marcus Rigsby",
+  "hs": "Irving MacArthur",
+  "college": "UT-Arlington",
+  "team": "UT-Arlington",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Myles Rigsby",
+  "hs": "FW OD Wyatt",
+  "college": "Tulsa",
+  "team": "Tulsa",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Micah Robinson",
+  "hs": "Plano John Paul II",
+  "college": "TCU",
+  "team": "TCU",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Chase Ross",
+  "hs": "Plano West",
+  "college": "Marquette",
+  "team": "Marquette",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Adarrin Scott",
+  "hs": "Dallas Carter",
+  "college": "UMKC",
+  "team": "UMKC",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "JaQuan Scott",
+  "hs": "Universal Academy",
+  "college": "UAPB",
+  "team": "UAPB",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Noah Shelby",
+  "hs": "Greenhill School",
+  "college": "TAMU",
+  "team": "TAMU",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Vinny Sigona",
+  "hs": "Plano East",
+  "college": "East Texas A&M",
+  "team": "East Texas A&M",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Antonio Sisk",
+  "hs": "Dallas Madison",
+  "college": "Miss Valley St",
+  "team": "Miss Valley St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Baron Smith Jr",
+  "hs": "Haltom",
+  "college": "Oral Roberts",
+  "team": "Oral Roberts",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Cam Smith",
+  "hs": "Duncanville",
+  "college": "Cal-Fullerton",
+  "team": "Cal-Fullerton",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Colin Smith",
+  "hs": "St. Mark's School of Texas",
+  "college": "UCSB",
+  "team": "UCSB",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Davion Sykes",
+  "hs": "Duncanville",
+  "college": "Southern Illinois",
+  "team": "Southern Illinois",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Derrick Talton Jr",
+  "hs": "Arlington Martin",
+  "college": "Buffalo",
+  "team": "Buffalo",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "David Terrell",
+  "hs": "Mansfield Summit",
+  "college": "UNT",
+  "team": "UNT",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Daniel Thomas",
+  "hs": "Dallas Carter",
+  "college": "UNC-Asheville",
+  "team": "UNC-Asheville",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "DJ Thomas",
+  "hs": "Richardson",
+  "college": "West Virginia",
+  "team": "West Virginia",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "MJ Thomas",
+  "hs": "Denton",
+  "college": "New Orleans",
+  "team": "New Orleans",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Walker Timme",
+  "hs": "Richardson Pearce",
+  "college": "N Arizona",
+  "team": "N Arizona",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Jaden Toombs",
+  "hs": "Dynamic Prep",
+  "college": "SMU",
+  "team": "SMU",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "JT Toppin",
+  "hs": "Faith Family",
+  "college": "Texas Tech",
+  "team": "Texas Tech",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Brandon Walker",
+  "hs": "Faith Family",
+  "college": "Miss St",
+  "team": "Miss St",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Jalylen Washington",
+  "hs": "Dynamic Prep",
+  "college": "UTRGV",
+  "team": "UTRGV",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Dillon Watt",
+  "hs": "Greenhill School",
+  "college": "Army",
+  "team": "Army",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Chendall Weaver",
+  "hs": "Mansfield Timberview",
+  "college": "Texas",
+  "team": "Texas",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Tre White",
+  "hs": "Little Elm",
+  "college": "Kansas",
+  "team": "Kansas",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Ameir Williams",
+  "hs": "Kennedale",
+  "college": "LaTech",
+  "team": "LaTech",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ },
+ {
+  "name": "Isaac Williams",
+  "hs": "Faith Family",
+  "college": "Baylor",
+  "team": "Baylor",
+  "height": null,
+  "hin": null,
+  "pos": null,
+  "level": "NCAA D1"
+ }
+]

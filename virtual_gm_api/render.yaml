@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: virtual-gm-api
+    runtime: python
+    region: ohio           # us-east-ohio — closest to TX/DFW
+    plan: starter          # upgrade to standard for production traffic
+    rootDir: virtual_gm_api
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/v1/health
+
+    envVars:
+      # All secrets injected from Render dashboard — never hardcoded here
+      - key: VIRTUAL_GM_API_KEY
+        sync: false          # set manually in Render dashboard
+      - key: VIRTUAL_GM_ADMIN_KEY
+        sync: false
+      - key: PRO_FILE_OS_API_URL
+        sync: false
+      - key: PRO_FILE_OS_API_KEY
+        sync: false
+      - key: VGM_DB_PATH
+        value: /opt/render/project/src/virtual_gm.db
+      - key: VGM_LOG_PATH
+        value: /opt/render/project/src/virtual_gm.log
+      - key: VGM_ALLOWED_ORIGINS
+        sync: false          # set to your Next.js domain in dashboard
+
+    disk:
+      name: vgm-data
+      mountPath: /opt/render/project/src
+      sizeGB: 1
